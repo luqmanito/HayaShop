@@ -34,7 +34,7 @@ const getProfileThunk = (body, token) => {
     try {
       dispatch(getProfilePending());
       const result = await getProfile(body, token);
-      console.log(result.data.result);
+      // console.log(result.data.result);
       dispatch(getProfileFulfilled(result.data));
     } catch (error) {
       console.log(error);
@@ -49,7 +49,7 @@ const editProfileThunk = (body, token, id, msg, msg2) => {
       dispatch(editProfilePending());
       const result = await editprofilesApi(body, token, id);
       msg()
-      console.log(result);
+      // console.log(result);
       dispatch(editProfileFulfilled(result.data));
     } catch (error) {
       msg2()

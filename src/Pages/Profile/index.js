@@ -22,7 +22,6 @@ import RadioButton from '../../Components/Radiobtn';
 const Profile = ({navigation}) => {
   const onPress = () => {
     navigation.navigate('EditProfile');
-    
   };
   const getProfileInfo = useSelector(state => state.profile.profile.result);
 
@@ -53,14 +52,13 @@ const Profile = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-     
       <View>
         <Text style={styles.delivery}>My Profile</Text>
       </View>
       <View style={styles.direct}>
         <Text style={styles.details}>Your Information</Text>
         <TouchableOpacity onPress={navigate}>
-        <Text style={styles.change}>edit</Text>
+          <Text style={styles.change}>edit</Text>
         </TouchableOpacity>
       </View>
       <View
@@ -74,9 +72,7 @@ const Profile = ({navigation}) => {
           borderRadius: 12,
         }}>
         <Image
-          source={
-            {uri: `${url + getProfileInfo[0].image}`}
-          }
+          source={{uri: `${url + getProfileInfo[0].image}`}}
           style={{width: 90, height: 90, borderRadius: 50, marginRight: 20}}
         />
         <View style={styles.descwrap}>
@@ -96,26 +92,25 @@ const Profile = ({navigation}) => {
 
       <View style={styles.submain} elevation={9}>
         <TouchableOpacity onPress={onPress1} style={styles.directs}>
-          <Text style={styles.choice}>Order History                  {'>'} </Text>
+          <Text style={styles.choice}>Order History {'>'} </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.submain} elevation={9}>
         <TouchableOpacity onPress={onPress1} style={styles.directs}>
-          <Text style={styles.choice}>Edit Password                 {'>'} </Text>
+          <Text style={styles.choice}>Edit Password {'>'} </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.submain} elevation={9}>
         <TouchableOpacity onPress={onPress1} style={styles.directs}>
-          <Text style={styles.choice}>FAQ                                   {'>'} </Text>
+          <Text style={styles.choice}>FAQ {'>'} </Text>
         </TouchableOpacity>
       </View>
       <View style={styles.submain} elevation={9}>
         <TouchableOpacity onPress={onPress1} style={styles.directs}>
-          <Text style={styles.choice}>Help                                  {'>'} </Text>
+          <Text style={styles.choice}>Help {'>'} </Text>
         </TouchableOpacity>
       </View>
 
-      
       <View style={styles.buttons2}>
         <Pressable style={styles.inbuttons2} onPress={onPress}>
           <Text
@@ -140,11 +135,9 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   descwrap: {
-    // backgroundColor:'brown',
     width: 220,
   },
   choice: {
-    // paddingLeft: 20,
     marginLeft: 10,
     fontWeight: 'bold',
     color: 'black',

@@ -10,7 +10,7 @@ import {
   Button,
   Touchable,
   TouchableOpacity,
-  Pressable
+  Pressable,
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
@@ -21,49 +21,41 @@ import cup from '../../assets/image/cup.png';
 import drink2 from '../../assets/image/drink2.png';
 import {useDispatch, useSelector} from 'react-redux';
 import productsDetailAction from '../../redux/actions/productsDetail';
-import { getProductById } from '../../Utils';
+import {getProductById} from '../../Utils';
 import paymentAction from '../../redux/actions/cart';
 
-const ProductDetail = ({navigation, route }) => {
+const ProductDetail = ({navigation, route}) => {
   const dispatch = useDispatch();
 
- 
-  const { itemId } = route.params;
+  const {itemId} = route.params;
   console.log(itemId);
-
-  const [body, setBody] = useState(null)
   const product = useSelector(state => state.productDetail.productsDetails[0]);
-
-  console.log(product);
-
-
+  const [body, setBody] = useState(null);
 
   const onPress = () => {
     setBody({
       id: product.id,
       name: product.name,
       price: product.price,
-      image: product.image
-    })
+      image: product.image,
+    });
     dispatch(paymentAction.payment(body));
     navigation.navigate('Cart');
   };
 
-
   console.log(body);
 
-  
   useEffect(() => {
     dispatch(productsDetailAction.getProductsDetailThunk(itemId));
   }, []);
 
-  const url ='http://192.168.137.1:8070' 
-  const rupiah = (number) => {
-    return new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
+  const url = 'http://192.168.137.1:8070';
+  const rupiah = number => {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
     }).format(number);
-  }; 
+  };
 
   return (
     <View style={styles.container}>
@@ -91,10 +83,14 @@ const ProductDetail = ({navigation, route }) => {
         </View>
       </View>
       <View style={styles.cupWrap}>
-        <Image source={
-          // cup
-          {uri: `${url+product.image}`}
-          } style={styles.cupimg} />
+        <Image
+          source={
+            {uri: `${url + product.image}`} === null
+              ? cup
+              : {uri: `${url + product.image}`}
+          }
+          style={styles.cupimg}
+        />
       </View>
       <View style={styles.dotdot}>
         <View
@@ -141,38 +137,39 @@ const ProductDetail = ({navigation, route }) => {
       </View>
       <View style={styles.prod}>
         <Text style={styles.prodName}>
-          {/* tes */}
-          {product.name}
-          </Text>
+          {product.name === null ? cup : product.name}
+        </Text>
       </View>
       <View style={styles.priceWrap}>
         <Text style={styles.priceTag}>
-          {/* 1303 */}
-          {rupiah(Number(product.price))}
-          </Text>
+          {product.price === null ? 10 : rupiah(Number(product.price))}
+        </Text>
       </View>
       <View style={styles.desc}>
-        <Text  style={styles.deliv}>Delivery info</Text>
-        <Text  style={styles.only}>Delivered only on monday until friday from 1 pm to 7 pm</Text>
-        <Text  style={styles.desc2}>Description</Text>
-        <Text  style={styles.desc3}>
-          {/* desc */}
-        {product.description}
+        <Text style={styles.deliv}>Delivery info</Text>
+        <Text style={styles.only}>
+          Delivered only on monday until friday from 1 pm to 7 pm
+        </Text>
+        <Text style={styles.desc2}>Description</Text>
+        <Text style={styles.desc3}>
+          {product.description === null
+            ? 'description text'
+            : product.description}
         </Text>
       </View>
       <View style={styles.buttons2}>
-            <Pressable style={styles.inbuttons2} onPress={onPress}>
-              <Text
-                style={{
-                  fontSize: 24,
-                  fontWeight: '600',
-                  color: 'white',
-                  textAlign: 'center',
-                }}>
-                Add to cart
-              </Text>
-            </Pressable>
-          </View>
+        <Pressable style={styles.inbuttons2} onPress={onPress}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '600',
+              color: 'white',
+              textAlign: 'center',
+            }}>
+            Add to cart
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 };
@@ -187,10 +184,10 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 100,
   },
-  buttons2:{
+  buttons2: {
     alignItems: 'center',
   },
-  
+
   inbuttons2: {
     backgroundColor: '#6A4029',
     width: 350,
@@ -199,26 +196,25 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
     borderRadius: 14,
     marginTop: 40,
-    
   },
-  deliv:{
+  deliv: {
     fontWeight: 'bold',
     color: 'black',
     fontSize: 20,
-    paddingTop: 20
+    paddingTop: 20,
   },
-  only:{
+  only: {
     // fontWeight: 'bold',
     color: 'grey',
     fontSize: 15,
   },
-  desc2:{
+  desc2: {
     fontWeight: 'bold',
     color: 'black',
     fontSize: 20,
-    paddingTop:20
+    paddingTop: 20,
   },
-  desc3:{
+  desc3: {
     color: 'grey',
     fontSize: 15,
   },

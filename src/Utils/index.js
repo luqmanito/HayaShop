@@ -3,7 +3,7 @@ import axios from "axios";
 
  
 const baseUrl = config.API_URL;
-console.log(config);
+// console.log(config);
 const localUrl = 'http://192.168.137.1:8070/api/show'
 
 const axiosRequest = (method, url, data, params) => {
@@ -27,7 +27,7 @@ export const loginApi = (data) => {
 export const signup = (body) => {
     
   const URL = localUrl + "/users/add";
-  console.log(URL);
+  // console.log(URL);
   return axios.post(URL, body);
 };
 
@@ -36,7 +36,7 @@ export const addProduct = (body) => {
   const login = JSON.parse(localStorage.getItem("userInfo"));
   const token = login.token;
   const URL = baseUrl + "/products/add";
-  console.log(token);
+  // console.log(token);
   return axios.post(URL, body, {
     headers: {
       "x-access-token": token,
@@ -48,7 +48,7 @@ export const addPromo = (body) => {
   const login = JSON.parse(localStorage.getItem("userInfo"));
   const token = login.token;
   const URL = baseUrl + "/promos/add";
-  console.log(token);
+  // console.log(token);
   return axios.post(URL, body, {
     headers: {
       "x-access-token": token,
@@ -57,7 +57,7 @@ export const addPromo = (body) => {
 };
 
 export const getProduct = (param) => {
-  console.log(param);
+  // console.log(param);
   const queryParam = {
     filter: param.filter ?? "",
     sort: param.sort ?? "id",
@@ -77,7 +77,7 @@ export const getProducts = (param, counter) => {
   };
   const URL =
   localUrl +
-    `/products/all?search=${queryParam.search}&filter=${queryParam.filter}&page=${counter}&sort=${queryParam.sort}&limit=12`;
+    `/products/all?search=${queryParam.search}&filter=${queryParam.filter}&page=${counter}&sort=${queryParam.sort}&limit=100`;
 
   return axios.get(URL);
 };
@@ -125,13 +125,9 @@ export const editPromo = (body, idPromo) => {
   });
 };
 
-export const editProduct = (body, idProductStore) => {
-  const login = JSON.parse(localStorage.getItem("userInfo"));
-  const token = login.token;
-  const id = login.id;
-  console.log(body);
-  const URL = baseUrl + `/products/modify/?id=${idProductStore}`;
-  return axios.patch(URL,  {
+export const editProductApi = (body, idProduct, token) => {
+  const URL = baseUrl + `/products/modify/?id=${idProduct}`;
+  return axios.patch(URL, body, {
     headers: {
       "x-access-token": token,
     },
@@ -139,10 +135,8 @@ export const editProduct = (body, idProductStore) => {
 };
 
 
-
-export const logoutBe = () => {
-  const login = JSON.parse(localStorage.getItem("userInfo"));
-  const token = login.token;
+// console.log(baseUrl);
+export const logoutApi = (token) => {
   const URL = baseUrl + `/auth/logout`
   return axios.delete(URL, {
     headers: {

@@ -6,6 +6,10 @@ const SignUp = ({navigation}) =>{
   function onPress() {
     navigation.navigate('SignUpData')
   }
+
+  const onPress2 = () => {
+    navigation.navigate('Login');
+  };
   
   return(
   <View style={styles.container}>
@@ -32,7 +36,7 @@ const SignUp = ({navigation}) =>{
         </Pressable>
       </View>
       <View style={styles.buttons2}>
-        <Pressable style={styles.inbuttons2} onPress={onPress}>
+        <Pressable style={styles.inbuttons2} onPress={onPress2}>
           <Text
             style={{
               fontSize: 24,

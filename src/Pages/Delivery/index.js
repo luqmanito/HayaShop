@@ -26,19 +26,15 @@ const Delivery = ({navigation}) => {
   const deliveryDetail = useSelector(state => state.checkout.checkoutItemList);
 
   const getUserDataProfile = useSelector(state => state.auth.userData);
-
-
   const id = getUserDataProfile.id;
   const token = getUserDataProfile.token;
 
   const getProfileInfo = useSelector(state => state.profile.profile.result);
   console.log(getProfileInfo[0].name);
-  const [addressUser, setAddressUser] = useState(
-    getProfileInfo[0].address
-    // 'alamat'
-    );
+
+  
+  const [addressUser, setAddressUser] = useState(getProfileInfo[0].address);
   const [phoneNumber, setPhoneNumber] = useState(
-    // 'notelp'
     getProfileInfo[0].mobile_number,
   );
 
@@ -48,21 +44,21 @@ const Delivery = ({navigation}) => {
     setSelect(false);
     setSelect1(false);
     setSelect2(true);
-    setDelivMethod('Dine in')
+    setDelivMethod('Dine in');
   };
   console.log(delivMethod);
   const onPress1 = () => {
     setSelect1(false);
     setSelect2(false);
     setSelect(true);
-    setDelivMethod('Door Delivery')
+    setDelivMethod('Door Delivery');
   };
 
   const onPress3 = () => {
     setSelect(false);
     setSelect2(false);
     setSelect1(true);
-    setDelivMethod('Pick up at store')
+    setDelivMethod('Pick up at store');
   };
 
   const rupiah = number => {
@@ -75,9 +71,6 @@ const Delivery = ({navigation}) => {
   const [select, setSelect] = useState(null);
   const [select1, setSelect1] = useState(null);
   const [select2, setSelect2] = useState(null);
-  
- 
- 
 
   // if (select) {
   //   setDelivMethod('Door Delivery')
@@ -87,12 +80,11 @@ const Delivery = ({navigation}) => {
   //   setDelivMethod('Dine in')
   // }
 
-
   const [body, setBody] = useState({
     total: deliveryDetail.totalPrice,
     address: addressUser,
     mobile_number: phoneNumber,
-    deliveryMethod: delivMethod
+    deliveryMethod: delivMethod,
   });
   const onChangeHandler = (text, type) => {
     setBody(body => ({...body, [type]: text}));
@@ -116,7 +108,6 @@ const Delivery = ({navigation}) => {
     dispatch(profileAction.getProfileThunk(id, token));
   }, []);
 
-  
   return (
     <View style={styles.container}>
       <View style={styles.main}>

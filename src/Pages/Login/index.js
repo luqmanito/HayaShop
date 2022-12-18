@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from 'react-redux';
 import {
   ImageBackground,
   StyleSheet,
@@ -11,14 +11,26 @@ import {
 import sign from '../../assets/image/loginimg.jpg';
 import authAction from '../../redux/actions/auth';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNavigation} from '@react-navigation/native';
+import {StackActions} from '@react-navigation/native';
 
-const Login = ({navigation}) => {
+const Login = () => {
+  const navigation = useNavigation();
+
   const onPress = () => {
     showMessage({
-      message: 'Login Success',
+      message: 'User Login Success',
       type: 'success',
-    })
-    navigation.navigate('Homepage');
+    });
+    navigation.dispatch(StackActions.replace('Homepage'));
+  };
+  const onPressAdmin = () => {
+    showMessage({
+      message: 'Admin Login Success',
+      type: 'success',
+    });
+    navigation.dispatch(StackActions.replace('HomepageAdmin'));
   };
   const onPress2 = () => {
     showMessage({
@@ -26,48 +38,59 @@ const Login = ({navigation}) => {
       type: 'danger',
     });
   };
+  const onPress3 = () => {
+    navigation.navigate('Forgot');
+  };
+  const onPress4 = () => {
+    navigation.navigate('SignUpData');
+  };
+
+  const storeData = async value => {
+    try {
+      console.log(value);
+      await AsyncStorage.setItem('token', value);
+    } catch (e) {
+      console.log('gagal nyetor');
+    }
+  };
 
   const [body, setBody] = useState({});
   const dispatch = useDispatch();
   const onChangeHandler = (text, type) => {
     setBody(body => ({...body, [type]: text}));
   };
-  console.log(body);
+  // console.log(body);
 
-  const loginHandler = (e) => {
+  const loginHandler = e => {
     console.log('logincuy');
     e.preventDefault();
-    dispatch(
-      authAction.loginThunk(body, onPress, onPress2)
-    );
-    
+    dispatch(authAction.loginThunk(body, onPress, onPress2, storeData, onPressAdmin));
   };
-
-
 
   return (
     <View style={styles.container}>
       <View style={styles.black}>
         <ImageBackground source={sign} resizeMode="cover" style={styles.image}>
-        
           <Text style={styles.textcoffee}>Login</Text>
           <View style={styles.wrapper}>
             <TextInput
-            onChangeText={text => onChangeHandler(text, 'email')}
+              onChangeText={text => onChangeHandler(text, 'email')}
               placeholderTextColor="white"
               placeholder="Enter your email adress"
               style={styles.form}
             />
             <TextInput
-            onChangeText={text => onChangeHandler(text, 'password')}
+              onChangeText={text => onChangeHandler(text, 'password')}
               placeholderTextColor="white"
               placeholder="Enter your password"
               style={styles.form}
             />
-            <Text onPress={onPress2} style={styles.forgot}>Forgot Password</Text>
+            <Text onPress={onPress3} style={styles.forgot}>
+              Forgot Password
+            </Text>
           </View>
           <View style={styles.buttons}>
-            <Pressable style={styles.inbuttons} onPress={onPress}>
+            <Pressable style={styles.inbuttons} onPress={onPress4}>
               <Text
                 style={{
                   fontSize: 24,
@@ -103,39 +126,33 @@ function onPress() {
 }
 
 const styles = StyleSheet.create({
-  forgot:{
+  forgot: {
     marginTop: 20,
     color: 'white',
     textDecorationLine: 'underline',
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   form: {
     borderColor: 'white',
     borderBottomWidth: 2,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   wrapper: {
     marginTop: 200,
-    padding : 20
+    padding: 20,
   },
   black: {
-    
     flex: 1,
     backgroundColor: 'black',
     // opacity: ,
-   
-    
   },
   container: {
     flex: 1,
-
-    
   },
   image: {
     flex: 1,
     height: '100%',
     justifyContent: 'center',
-    
   },
   text: {
     position: 'relative',

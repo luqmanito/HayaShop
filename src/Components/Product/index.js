@@ -7,15 +7,14 @@ function Products(props) {
   const navigation = useNavigation();
   const url ='http://192.168.137.1:8070'
   const idku = props.id
-  console.log(idku);
+  // console.log(idku);
 
   const onPress = () => {
     navigation.navigate('ProductDetail', {
       itemId: idku,
     });
-    console.log('te');
   };
-  console.log(`${url+props.image}`);
+  // console.log(`${url+props.image}`);
 
   return (
     <View>

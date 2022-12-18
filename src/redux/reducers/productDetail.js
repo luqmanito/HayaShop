@@ -2,7 +2,9 @@ import {ActionType} from 'redux-promise-middleware';
 import {actionStrings} from '../actions/actionStrings';
 
 const initialState = {
-  productsDetails: [],
+  productsDetails: {
+    image : null
+  }
 };
 
 const productsDetailsReducer = (prevState = initialState, {payload, type}) => {

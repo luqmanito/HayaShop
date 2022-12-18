@@ -16,15 +16,11 @@ import {
 import DatePicker from 'react-native-date-picker';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
-import option from '../../assets/image/options.png';
-import cart from '../../assets/image/cart.png';
 import back from '../../assets/image/back.png';
-import cup from '../../assets/image/cup.png';
 import pencil from '../../assets/image/pencil.png';
 import {color} from 'react-native-reanimated';
 import RadioButton from '../../Components/Radiobtn';
 import {useDispatch, useSelector} from 'react-redux';
-import {ChooseDate} from '../../Components/Datepicker';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import profileAction from '../../redux/actions/profile';
 import {showMessage, hideMessage} from 'react-native-flash-message';
@@ -108,13 +104,13 @@ const EditProfile = ({navigation}) => {
     showMessage({
       message: 'Profile Updated!',
       type: 'success',
-    })
+    });
   };
   const msg2 = () => {
     showMessage({
       message: 'Update Failed!',
       type: 'danger',
-    })
+    });
   };
 
   const [imageCamera, setImageCamera] = useState({
@@ -134,10 +130,10 @@ const EditProfile = ({navigation}) => {
       } else {
         const data = res.assets[0];
         setImageCamera(data);
-        console.log(data);
+
         setBody({
           ...body,
-          image: data
+          image: data,
         });
         setFormState({
           ...body,
@@ -159,13 +155,12 @@ const EditProfile = ({navigation}) => {
       } else {
         const data = res.assets[0];
         setImageCamera(data);
-        console.log(data);
+
         setBody({
           ...body,
           // image: data.parts[0][1].image
-          image: data
+          image: data,
           // image: data.uri.split('/').pop(),
-         
         });
       }
     });
@@ -173,8 +168,6 @@ const EditProfile = ({navigation}) => {
 
   const fileName = imageCamera.uri.split('/').pop();
   // const fileType = fileName.split('.').pop();
-
-
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -193,9 +186,9 @@ const EditProfile = ({navigation}) => {
       'imageUrl',
       // body.image
       {
-        uri: body.image.uri, 
+        uri: body.image.uri,
         name: body.image.fileName,
-        size: body.image.fileSize,  
+        size: body.image.fileSize,
         type: body.image.type,
       },
     );
@@ -241,7 +234,6 @@ const EditProfile = ({navigation}) => {
             )}
 
             <Pressable
-              // onPress={openCamera}
               onPress={() => setModalVisible(true)}>
               <Image source={pencil} style={styles.number} />
             </Pressable>
@@ -252,7 +244,7 @@ const EditProfile = ({navigation}) => {
             transparent={true}
             visible={modalVisible}
             onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
+              // Alert.alert('Modal has been closed.');
               setModalVisible(!modalVisible);
             }}>
             <View style={styles.centeredView}>
@@ -270,7 +262,7 @@ const EditProfile = ({navigation}) => {
                 <Pressable
                   style={[styles.button, styles.buttonClose]}
                   onPress={() => setModalVisible(!modalVisible)}>
-                  <Text style={styles.textStyle}>Hide Modal</Text>
+                  <Text style={styles.textStyles}>X Close</Text>
                 </Pressable>
               </View>
             </View>
@@ -469,7 +461,7 @@ const styles = StyleSheet.create({
     height: 25,
     position: 'absolute',
     bottom: 10,
-    right: 0,
+    right: -70,
   },
   buttons2: {
     alignItems: 'center',
@@ -555,6 +547,53 @@ const styles = StyleSheet.create({
   dotdot: {
     alignItems: 'center',
     paddingTop: 30,
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    marginTop: 10,
+  },
+  buttonOpen: {
+    backgroundColor: '#F194FF',
+  },
+  buttonClose: {
+    backgroundColor: '#6A4029',
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  textStyles: {
+    color: 'black',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
   },
 });
 

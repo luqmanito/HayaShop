@@ -2,12 +2,25 @@ import {ActionType} from 'redux-promise-middleware';
 import {actionStrings} from '../actions/actionStrings';
 
 const initialState = {
-  profile: [],
+  profile: {
+    id: null,
+    name: null,
+    password: null,
+    mobile_number: null,
+    email: null,
+    address: null,
+    gender: null,
+    birth_date: null,
+    role: null,
+    firstname: null,
+    lastname: null,
+    image: null
+  },
 };
 
 const profileReducer = (prevState = initialState, {payload, type}) => {
   const {Pending, Rejected, Fulfilled} = ActionType;
-  const {getProfile, editProfile} = actionStrings;
+  const {getProfile, editProfile, profileLogout} = actionStrings;
   switch (type) {
     case getProfile.concat('_', Pending):
       return {
@@ -30,10 +43,10 @@ const profileReducer = (prevState = initialState, {payload, type}) => {
         isLoading: false,
         isError: false,
         isFulfilled: true,
-        profile: payload.data
+        profile: payload.data,
       };
 
-      case editProfile.concat('_', Pending):
+    case editProfile.concat('_', Pending):
       return {
         ...prevState,
         isLoading: true,
@@ -54,8 +67,9 @@ const profileReducer = (prevState = initialState, {payload, type}) => {
         isLoading: false,
         isError: false,
         isFulfilled: true,
-        
       };
+    case profileLogout.concat('_', Fulfilled):
+      return initialState;
 
     default:
       return prevState;

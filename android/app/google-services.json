@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "391342303236",
+    "project_id": "mas-ito-frozen",
+    "storage_bucket": "mas-ito-frozen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391342303236:android:74a4d3b1630444724aad51",
+        "android_client_info": {
+          "package_name": "com.hayashops"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "391342303236-0dvn3k24hgmbqq587r4n1t2g8hf5me9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVoObQI3PI894yeu6iCSHvDrHMwFbfEMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "391342303236-0dvn3k24hgmbqq587r4n1t2g8hf5me9u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

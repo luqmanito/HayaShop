@@ -78,8 +78,8 @@ const getProductsDetailThunk = (body ) => {
 
 
 
-const productsAction = {
+const productsDetailAction = {
   getProductsDetailThunk,
 };
 
-export default productsAction;
+export default productsDetailAction;
