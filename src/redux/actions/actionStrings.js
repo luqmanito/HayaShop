@@ -10,6 +10,8 @@ export const actionStrings = {
   productDetail: "PRODUCT_DETAIL",
   cartSubsctract:"ADD_CART",
   checkoutItem: 'CHECKOUT_ITEM',
-  addPayment: 'ADD_PAYMENT'
+  addPayment: 'ADD_PAYMENT',
+  addProduct: "ADD_PRODUCT",
+  addPromo: "ADD_PROMO"
 };
 

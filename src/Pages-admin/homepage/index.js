@@ -30,6 +30,7 @@ import Products from '../../Components/Product';
 import productsAction from '../../redux/actions/products';
 import profileAction from '../../redux/actions/profile';
 import cup from '../../assets/image/cup.png';
+import admin from '../../assets/image/admin.jpg';
 import authAction from '../../redux/actions/auth';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -198,7 +199,10 @@ const HompepageAdmin = ({navigation}) => {
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('token');
-    } catch (e) {}
+      console.log(value);
+    } catch (e) {
+       console.log(e.err);
+    }
   };
 
   const removeValue = async () => {
@@ -229,9 +233,6 @@ const HompepageAdmin = ({navigation}) => {
   console.log(pageData);
 
   const nextData = () => {
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
-    // dispatch(productsAction.getProductsThunk2(body, tempCount, add));
     const tempCount = pageIndex + 1;
     setPageIndex(tempCount);
   };
@@ -239,11 +240,12 @@ const HompepageAdmin = ({navigation}) => {
   const addProductBtn = () => {
     navigation.navigate('AddProduct', {});
   };
+  const addPromoBtn = () => {
+    navigation.navigate('AddPromo', {});
+  };
+
 
   const prevData = () => {
-    // const tempCount = counter - 1;
-    // setCounter(tempCount);
-    // dispatch(productsAction.getProductsThunk2(body, tempCount, add));
     const tempCount = pageIndex - 1;
     setPageIndex(tempCount);
   };
@@ -265,11 +267,12 @@ const HompepageAdmin = ({navigation}) => {
       <View style={styles.wrapperdrawer}>
         <View elevation={9} style={styles.drawermain}>
           <Image
-            source={
-              {uri: `${url + getProfileInfo[0].image}`} === undefined
-                ? cup
-                : {uri: `${url + getProfileInfo[0].image}`}
-            }
+            // source={
+            //   {uri: `${url + getProfileInfo[0].image}`} === undefined
+            //     ? cup
+            //     : {uri: `${url + getProfileInfo[0].image}`}
+            // }
+            source={admin}
             style={styles.drawerpic}
           />
           <Text style={styles.names}>
@@ -532,6 +535,19 @@ const HompepageAdmin = ({navigation}) => {
                 </Text>
               </Pressable>
             </View>
+            <View style={styles.buttons2}>
+              <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: '600',
+                    color: '#6A4029',
+                    textAlign: 'center',
+                  }}>
+                  Add Promo
+                </Text>
+              </Pressable>
+            </View>
             <Tab.Navigator>
               <Tab.Screen name="SignUp" component={SignUpData} />
 
@@ -583,6 +599,16 @@ const styles = StyleSheet.create({
   },
   inbuttons2: {
     backgroundColor: '#6A4029',
+    width: 350,
+    height: 50,
+    paddingTop: 6,
+    paddingBottom: 6,
+    borderRadius: 14,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  inbuttons3: {
+    backgroundColor: '#FFBA33',
     width: 350,
     height: 50,
     paddingTop: 6,

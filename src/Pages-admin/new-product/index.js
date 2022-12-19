@@ -17,7 +17,7 @@ import DatePicker from 'react-native-date-picker';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigationContainer} from '@react-navigation/native';
 import back from '../../assets/image/back.png';
-import pencil from '../../assets/image/pencil.png';
+import plus from '../../assets/image/plus.png';
 import cam from '../../assets/image/cam.png';
 import del2 from '../../assets/image/del2.png';
 import {color} from 'react-native-reanimated';
@@ -26,6 +26,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import profileAction from '../../redux/actions/profile';
 import {showMessage, hideMessage} from 'react-native-flash-message';
+import productsAction from '../../redux/actions/products';
 
 const AddProduct = ({navigation}) => {
   const dispatch = useDispatch();
@@ -77,7 +78,7 @@ const AddProduct = ({navigation}) => {
   const [body, setBody] = useState(false);
   const [nameUser, setNameUser] = useState(getProfileInfo[0].name);
   const [phoneUser, setPhoneUser] = useState(getProfileInfo[0].mobile_number);
-  const [birthUser, setBirthUser] = useState(finalDate);
+  const [price, setPrice] = useState(finalDate);
   const [addressUser, setAddressUser] = useState(getProfileInfo[0].address);
   const [formState, setFormState] = useState({});
 
@@ -88,7 +89,7 @@ const AddProduct = ({navigation}) => {
     setPhoneUser({[type]: text});
   };
   const handleInputValue3 = (text, type) => {
-    setBirthUser({[type]: text});
+    setPrice({[type]: text});
   };
   const handleInputValue4 = (text, type) => {
     setAddressUser({[type]: text});
@@ -104,18 +105,20 @@ const AddProduct = ({navigation}) => {
 
   const msg = () => {
     showMessage({
-      message: 'Profile Updated!',
+      message: 'Added new product success!',
       type: 'success',
     });
   };
   const msg2 = () => {
     showMessage({
-      message: 'Update Failed!',
+      message: 'Sorry add new product failed!',
       type: 'danger',
     });
   };
 
-  const [imageCamera, setImageCamera] = useState({cam});
+  const [imageCamera, setImageCamera] = useState({
+    uri: `${url + getProfileInfo[0].image}`,
+  });
 
   const openCamera = () => {
     const option = {
@@ -158,16 +161,15 @@ const AddProduct = ({navigation}) => {
 
         setBody({
           ...body,
-          // image: data.parts[0][1].image
+  
           image: data,
-          // image: data.uri.split('/').pop(),
+          
         });
       }
     });
   };
 
-//   const fileName = imageCamera.uri.split('/').pop();
-  // const fileType = fileName.split('.').pop();
+
 
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -175,11 +177,14 @@ const AddProduct = ({navigation}) => {
   if (body.name !== undefined) {
     data.append('name', body.name);
   }
-  if (body.mobile_number !== undefined) {
-    data.append('mobile_number', body.mobile_number);
+  if (body.price !== undefined) {
+    data.append('price', Number(body.price));
   }
-  if (body.address !== undefined) {
-    data.append('address', body.address);
+  if (body.delivery_info !== undefined) {
+    data.append('delivery_info', body.delivery_info);
+  }
+  if (body.description !== undefined) {
+    data.append('description', body.description);
   }
   if (body.image !== undefined) {
     data.append(
@@ -194,11 +199,11 @@ const AddProduct = ({navigation}) => {
     );
   }
 
-  const onPress = () => {
-    dispatch(profileAction.editProfileThunk(data, token, id, msg, msg2));
-  };
-  console.log(body);
   console.log(data);
+  const onPressSave = () => {
+    dispatch(productsAction.addProductThunk(data, token, msg, msg2));
+  };
+
 
   useEffect(() => {
     dispatch(profileAction.getProfileThunk(id, token));
@@ -230,20 +235,17 @@ const AddProduct = ({navigation}) => {
         </View>
         <View style={styles.wrapper}>
           <View style={styles.jaminan}>
-            {/* {imageCamera != null && (
+          {imageCamera != null && (
               <Image
                 // onChangeText={changeHandlerInputImage}
                 source={{uri: imageCamera.uri}}
                 style={styles.iconCard}
               />
-            )} */}
-            <Image 
-            style={styles.iconCard}
-            source={cam}/>
+            )}
 
             <Pressable
               onPress={() => setModalVisible(true)}>
-              <Image source={pencil} style={styles.number} />
+              <Image source={plus} style={styles.number} />
             </Pressable>
           </View>
 
@@ -282,11 +284,13 @@ const AddProduct = ({navigation}) => {
             <Text style={styles.textStyle}>Show Modal</Text>
           </Pressable> */}
         </View>
-        <Text>Name :</Text>
+        <Text style={styles.tagcat}>Name :</Text>
         <View style={styles.wrappers}>
           <TextInput
-            placeholder="input your name.."
-            value={nameUser}
+          multiline={true}
+          numberOfLines={3}
+            placeholder="Input the product name min. 30 characters"
+            // value={nameUser}
             style={styles.form}
             onChangeText={text => {
               handleInputValue1(text, 'name');
@@ -295,83 +299,52 @@ const AddProduct = ({navigation}) => {
             }}
           />
         </View>
-        <View style={styles.submain}>
-          <TouchableOpacity onPress={onPress1} style={styles.directs}>
-            <RadioButton selected={select1} />
-            <Text style={styles.choice}>Female</Text>
-          </TouchableOpacity>
-          <TouchableOpacity onPress={onPress3} style={styles.directs}>
-            <RadioButton selected={select2} />
-            <Text style={styles.choice}>Male</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.tagcat}>Email Adress :</Text>
+       
+        <Text style={styles.tagcat}>Price :</Text>
         <View style={styles.wrappers}>
           <TextInput
-            // placeholderTextColor="black"
-            value={getProfileInfo[0].email}
+            multiline={true}
+            numberOfLines={3}
+            placeholder="Input the product price"
+            onChangeText={text => {
+                handleInputValue3(text, 'price');
+                onChangeHandler(text, 'price');
+              }}
             style={styles.form}
           />
         </View>
-        <Text style={styles.tagcat}>Phone Number :</Text>
+        <Text style={styles.tagcat}>Delivery info :</Text>
         <View style={styles.wrappers}>
           <TextInput
-            // placeholderTextColor="black"
-            value={phoneUser}
-            placeholder="input your phone number.."
+            multiline={true}
+            numberOfLines={3}
+            // value={phoneUser}
+            placeholder="Type delivery information"
             style={styles.form}
             onChangeText={text => {
-              handleInputValue2(text, 'mobile_number');
-              onChangeHandler(text, 'mobile_number');
+              handleInputValue2(text, 'delivery_info');
+              onChangeHandler(text, 'delivery_info');
             }}
           />
         </View>
-        <Text style={styles.tagcat}></Text>
+
+        
+        <Text style={styles.tagcat}>Description :</Text>
         <View style={styles.wrappers}>
           <TextInput
-            // placeholderTextColor="black"
-            value={finalDate}
-            placeholder="input your birth date.."
+            multiline={true}
+            numberOfLines={3}
+            // value={addressUser}
+            placeholder="Describe your product min. 150 characters"
             style={styles.form}
             onChangeText={text => {
-              handleInputValue3(text, 'birth_date');
-              onChangeHandler(text, 'birth_date');
-            }}
-          />
-          <Text style={styles.setdate} onPress={() => setOpen(true)}>
-            Set Date
-          </Text>
-          <DatePicker
-            modal
-            open={open}
-            date={date}
-            mode="date"
-            onConfirm={date => {
-              setOpen(false);
-              setDate(date);
-              setFinalDate(dds);
-            }}
-            onCancel={() => {
-              setOpen(false);
-            }}
-            onDateChange={setDate}
-          />
-        </View>
-        <Text style={styles.tagcat}>Delivery Adress :</Text>
-        <View style={styles.wrappers}>
-          <TextInput
-            // placeholderTextColor="black"
-            value={addressUser}
-            placeholder="Input your address here.."
-            style={styles.form}
-            onChangeText={text => {
-              handleInputValue4(text, 'address');
-              onChangeHandler(text, 'address');
+              handleInputValue4(text, 'description');
+              onChangeHandler(text, 'description');
             }}
           />
         </View>
         <View style={styles.buttons2}>
-          <Pressable style={styles.inbuttons2} onPress={onPress}>
+          <Pressable style={styles.inbuttons2} onPress={onPressSave}>
             <Text
               style={{
                 fontSize: 24,
@@ -379,7 +352,7 @@ const AddProduct = ({navigation}) => {
                 color: 'white',
                 textAlign: 'center',
               }}>
-              Save and update
+              Save product
             </Text>
           </Pressable>
         </View>
@@ -425,6 +398,10 @@ const styles = StyleSheet.create({
   },
   tagcat: {
     paddingTop: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'black'
+
   },
   directs: {
     display: 'flex',
@@ -614,3 +591,4 @@ const styles = StyleSheet.create({
 });
 
 export default AddProduct;
+

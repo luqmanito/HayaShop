@@ -62,7 +62,6 @@ const Login = () => {
   // console.log(body);
 
   const loginHandler = e => {
-    console.log('logincuy');
     e.preventDefault();
     dispatch(authAction.loginThunk(body, onPress, onPress2, storeData, onPressAdmin));
   };

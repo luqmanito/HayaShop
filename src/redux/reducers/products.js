@@ -7,7 +7,7 @@ const initialState = {
 
 const productsReducer = (prevState = initialState, {payload, type}) => {
   const {Pending, Rejected, Fulfilled} = ActionType;
-  const {getProducts, editProduct} = actionStrings;
+  const {getProducts, editProduct, addProduct} = actionStrings;
   switch (type) {
     case getProducts.concat('_', Pending):
       return {
@@ -50,6 +50,29 @@ const productsReducer = (prevState = initialState, {payload, type}) => {
         err: payload.error.response?.data.message,
       };
     case editProduct.concat('_', Fulfilled):
+      return {
+        ...prevState,
+        isLoading: false,
+        isError: false,
+        isFulfilled: true,
+      };
+
+      case addProduct.concat('_', Pending):
+      return {
+        ...prevState,
+        isLoading: true,
+        isError: false,
+        isFulfilled: false,
+      };
+    case addProduct.concat('_', Rejected):
+      return {
+        ...prevState,
+        isLoading: false,
+        isError: true,
+        isFulfilled: false,
+        err: payload.error.response?.data.message,
+      };
+    case addProduct.concat('_', Fulfilled):
       return {
         ...prevState,
         isLoading: false,

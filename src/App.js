@@ -27,6 +27,7 @@ import HompepageAdmin from './Pages-admin/homepage';
 import EditDetailAdmin from './Pages-admin/edit-product';
 import ManageOrder from './Pages-admin/manage-order';
 import AddProduct from './Pages-admin/new-product';
+import AddPromo from './Pages-admin/new-promo';
 
 
 const App = () => {
@@ -135,6 +136,11 @@ const App = () => {
               <Stack.Screen
               name="AddProduct"
               component={AddProduct}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="AddPromo"
+              component={AddPromo}
               options={{headerShown: false}}
             />
           </Stack.Navigator>

@@ -38,7 +38,6 @@ const loginThunk = (body, onPress, onPress2, storeData, onPressAdmin) => {
     try {
       dispatch(loginPending());
       const result = await loginApi(body);
-      // console.log(result.data.data.token);
       dispatch(loginFulfilled(result.data));
       dispatch(
         profileAction.getProfileThunk(

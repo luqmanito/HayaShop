@@ -1,6 +1,6 @@
 import {ActionType} from 'redux-promise-middleware';
 import {actionStrings} from './actionStrings';
-import {editProductApi, getProducts} from '../../Utils';
+import {addProductApi, editProductApi, getProducts} from '../../Utils';
 
 const {Pending, Rejected, Fulfilled} = ActionType;
 
@@ -26,6 +26,19 @@ const editProductRejected = error => ({
 });
 const editProductFulfilled = data => ({
   type: actionStrings.editProduct.concat('_', Fulfilled),
+  payload: {data},
+});
+
+const addProductPending = () => ({
+  type: actionStrings.addProduct.concat('_', Pending),
+});
+
+const addProductRejected = error => ({
+  type: actionStrings.addProduct.concat('_', Rejected),
+  payload: {error},
+});
+const addProductFulfilled = data => ({
+  type: actionStrings.addProduct.concat('_', Fulfilled),
   payload: {data},
 });
 
@@ -64,11 +77,27 @@ const editProductThunk = (body, id, token, msg, msg2) => {
       const result = await editProductApi(body, id, token);
       console.log(result);
       msg()
-      dispatch(editProductRejected(result.data));
+      dispatch(editProductFulfilled(result.data));
     } catch (error) {
       console.log(error);
       msg2()
-      dispatch(editProductFulfilled(error));
+      dispatch(editProductRejected(error));
+    }
+  };
+};
+
+const addProductThunk = (body, token, msg, msg2) => {
+  return async dispatch => {
+    try {
+      dispatch(addProductPending());
+      const result = await addProductApi(body, token);
+      console.log(result);
+      msg()
+      dispatch(addProductFulfilled(result.data));
+    } catch (error) {
+      console.log(error);
+      msg2()
+      dispatch(addProductRejected(error));
     }
   };
 };
@@ -77,6 +106,7 @@ const productsAction = {
   getProductsThunk,
   getProductsThunk2,
   editProductThunk,
+  addProductThunk
 };
 
 export default productsAction;
