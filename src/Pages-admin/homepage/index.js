@@ -37,6 +37,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ProductsAdmin from '../../Components/Products-admin';
+import PushNotification from 'react-native-push-notification';
 const HompepageAdmin = ({navigation}) => {
   const product = useSelector(state => state.products.products);
   const getUserDataProfile = useSelector(state => state.auth.userData);
@@ -44,24 +45,18 @@ const HompepageAdmin = ({navigation}) => {
   const token = getUserDataProfile.token;
 
   const getProfileInfo = useSelector(state => state.profile.profile.result);
-  // console.log(getProfileInfo[0].name);
+
 
   const [search, setSearch] = useState(null);
   const [counter, setCounter] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
   const [dataSources, setDataSources] = useState(
-    // [
-    // ...product
+
     product,
-    // ]
+
   );
-  const [param, setParam] = useState({
-    // search: getQuery.get("search") ?? "",
-    // sort: getQuery.get("sort") ?? "",
-    // filter: getQuery.get("filter") ?? "",
-    // page: getQuery.get("page") ?? 1,
-  });
-  // console.log(product);
+  const [param, setParam] = useState({});
+
   const dispatch = useDispatch();
   const Tab = createBottomTabNavigator();
   const drawer = useRef(null);
@@ -86,8 +81,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'asc',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -98,8 +92,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: '',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -110,8 +103,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: '',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -122,8 +114,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'most-popular',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -134,8 +125,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'most-expensive',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -146,11 +136,17 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'cheapest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
+  const showNotifHandle = msg => {
+    PushNotification.localNotification({
+      channelId: 'local-notification',
+      title: 'Local Notification',
+      message: msg,
+    });
+  };
   const newest = () => {
     const body = {
       ...param,
@@ -158,8 +154,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'newest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+ 
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -170,15 +165,14 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'oldest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
   const add = () => {
-    // setDataSources([...dataSources, ...product]);
+
     setDataSources(
-      // ...dataSources, ...product
+   
       product,
     );
   };
@@ -201,7 +195,7 @@ const HompepageAdmin = ({navigation}) => {
       const value = await AsyncStorage.getItem('token');
       console.log(value);
     } catch (e) {
-       console.log(e.err);
+      console.log(e.err);
     }
   };
 
@@ -209,10 +203,10 @@ const HompepageAdmin = ({navigation}) => {
     try {
       await AsyncStorage.removeItem('token');
     } catch (e) {
-      // remove error
+   
     }
 
-    // console.log('Done.');
+
   };
   const [searchProduct, setSearchProduct] = useState('');
   const onChangeHandler = text => setSearchProduct(text);
@@ -223,7 +217,7 @@ const HompepageAdmin = ({navigation}) => {
 
   const url = 'http://192.168.137.1:8070';
   const countries = ['Most expensive', 'Cheapest', 'Newest', 'Oldest'];
-  // console.log(param);
+
 
   const pageSize = 12;
   let page = pageIndex;
@@ -244,7 +238,6 @@ const HompepageAdmin = ({navigation}) => {
     navigation.navigate('AddPromo', {});
   };
 
-
   const prevData = () => {
     const tempCount = pageIndex - 1;
     setPageIndex(tempCount);
@@ -254,24 +247,19 @@ const HompepageAdmin = ({navigation}) => {
     getData();
     dispatch(productsAction.getProductsThunk(body, counter, add));
     dispatch(profileAction.getProfileThunk(id, token));
-    // setDataSources(product);
-    // addData()
+   
   }, [counter]);
 
   const navigationView = () => (
     <View
       style={[
         styles.containerDrawer,
-        // styles.navigationContainer
+     
       ]}>
       <View style={styles.wrapperdrawer}>
         <View elevation={9} style={styles.drawermain}>
           <Image
-            // source={
-            //   {uri: `${url + getProfileInfo[0].image}`} === undefined
-            //     ? cup
-            //     : {uri: `${url + getProfileInfo[0].image}`}
-            // }
+      
             source={admin}
             style={styles.drawerpic}
           />
@@ -327,7 +315,6 @@ const HompepageAdmin = ({navigation}) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
@@ -367,7 +354,7 @@ const HompepageAdmin = ({navigation}) => {
                 />
               </TouchableOpacity>
             </View>
-        
+
             <View style={styles.sect}>
               <Image
                 source={cart}
@@ -378,7 +365,6 @@ const HompepageAdmin = ({navigation}) => {
                 }}
               />
             </View>
-        
           </View>
           <View style={styles.goodWrapper}>
             <Text style={styles.good}>A good coffee is {'\n'}a good day</Text>
@@ -408,10 +394,9 @@ const HompepageAdmin = ({navigation}) => {
             <View style={styles.dropdown}>
               <SelectDropdown
                 data={countries}
-                // defaultValueByIndex={1}
-                // defaultValue={'Egypt'}
+              
                 onSelect={(selectedItem, index) => {
-                  // console.log(selectedItem, index);
+          
                   if (index === 0) {
                     mostExpensive();
                   }
@@ -548,6 +533,23 @@ const HompepageAdmin = ({navigation}) => {
                 </Text>
               </Pressable>
             </View>
+            <View style={styles.buttons2}>
+              <Pressable
+                style={styles.inbuttons4}
+                onPress={() => {
+                  showNotifHandle('pesan dari notifikasi');
+                }}>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontWeight: '600',
+                    color: '#6A4029',
+                    textAlign: 'center',
+                  }}>
+                  Show Notification
+                </Text>
+              </Pressable>
+            </View>
             <Tab.Navigator>
               <Tab.Screen name="SignUp" component={SignUpData} />
 
@@ -608,6 +610,16 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   inbuttons3: {
+    backgroundColor: '#FFBA33',
+    width: 350,
+    height: 50,
+    paddingTop: 6,
+    paddingBottom: 6,
+    borderRadius: 14,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  inbuttons4: {
     backgroundColor: '#FFBA33',
     width: 350,
     height: 50,
