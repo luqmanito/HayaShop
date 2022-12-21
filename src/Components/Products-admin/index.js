@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderRadius: 20,
     marginTop: 50,
+    marginLeft: 30
   },
   number:{
     width: 30,

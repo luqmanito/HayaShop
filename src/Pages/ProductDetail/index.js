@@ -30,15 +30,16 @@ const ProductDetail = ({navigation, route}) => {
   const {itemId} = route.params;
   console.log(itemId);
   const product = useSelector(state => state.productDetail.productsDetails[0]);
-  const [body, setBody] = useState(null);
+
+  console.log(product);
+  const [body, setBody] = useState({
+    id: product.id,
+    name: product.name,
+    price: product.price,
+    image: product.image,
+  });
 
   const onPress = () => {
-    setBody({
-      id: product.id,
-      name: product.name,
-      price: product.price,
-      image: product.image,
-    });
     dispatch(paymentAction.payment(body));
     navigation.navigate('Cart');
   };

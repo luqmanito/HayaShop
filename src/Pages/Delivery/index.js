@@ -32,33 +32,32 @@ const Delivery = ({navigation}) => {
   const getProfileInfo = useSelector(state => state.profile.profile.result);
   console.log(getProfileInfo[0].name);
 
-  
   const [addressUser, setAddressUser] = useState(getProfileInfo[0].address);
   const [phoneNumber, setPhoneNumber] = useState(
     getProfileInfo[0].mobile_number,
   );
 
-  const [delivMethod, setDelivMethod] = useState('Door Delivery');
+  const [delivMethod, setDelivMethod] = useState(null);
 
   const onPress2 = () => {
     setSelect(false);
     setSelect1(false);
     setSelect2(true);
-    setDelivMethod('Dine in');
+    setBody({...body, deliveryMethod: 'Dine in'});
   };
   console.log(delivMethod);
   const onPress1 = () => {
     setSelect1(false);
     setSelect2(false);
     setSelect(true);
-    setDelivMethod('Door Delivery');
+    setBody({...body, deliveryMethod: 'Door Delivery'});
   };
 
   const onPress3 = () => {
     setSelect(false);
     setSelect2(false);
     setSelect1(true);
-    setDelivMethod('Pick up at store');
+    setBody({...body, deliveryMethod: 'Pick up at store'});
   };
 
   const rupiah = number => {
@@ -72,19 +71,11 @@ const Delivery = ({navigation}) => {
   const [select1, setSelect1] = useState(null);
   const [select2, setSelect2] = useState(null);
 
-  // if (select) {
-  //   setDelivMethod('Door Delivery')
-  // } else if (select1) {
-  //   setDelivMethod('Pick up at store')
-  // } else if (select2) {
-  //   setDelivMethod('Dine in')
-  // }
-
   const [body, setBody] = useState({
     total: deliveryDetail.totalPrice,
     address: addressUser,
     mobile_number: phoneNumber,
-    deliveryMethod: delivMethod,
+    // deliveryMethod: delivMethod,
   });
   const onChangeHandler = (text, type) => {
     setBody(body => ({...body, [type]: text}));
@@ -112,7 +103,7 @@ const Delivery = ({navigation}) => {
     <View style={styles.container}>
       <View style={styles.main}>
         <View style={styles.red}>
-          <TouchableOpacity onPress={() => drawer.current.openDrawer()}>
+          <TouchableOpacity onPress={() => navigation.navigate('Cart')}>
             <Image
               source={back}
               style={{
@@ -123,76 +114,78 @@ const Delivery = ({navigation}) => {
           </TouchableOpacity>
         </View>
         <View style={styles.sect}>
-          <Text>Cart</Text>
+          <Text style={styles.sect2}>Checkout</Text>
         </View>
       </View>
-      <View>
-        <Text style={styles.delivery}>Delivery</Text>
-      </View>
-      <View style={styles.direct}>
-        <Text style={styles.details}>Address details</Text>
-        <Text style={styles.change}>change</Text>
-      </View>
-      <View style={styles.submain} elevation={9}>
-        <Text style={styles.street}>Your address</Text>
+      <ScrollView style={styles.scroll_view}>
         <View>
-          <TextInput
-            placeholder="input your address here.."
-            value={addressUser}
-            style={styles.detail}
-            onChangeText={text => {
-              handleInputValue1(text, 'address');
-              onChangeHandler(text, 'address');
-            }}
-          />
-
-          <TextInput
-            placeholder="input your phone number here.."
-            value={phoneNumber}
-            style={styles.idr}
-            onChangeText={text => {
-              handleInputValue2(text, 'mobile_number');
-              onChangeHandler(text, 'mobile_number');
-            }}
-          />
+          <Text style={styles.delivery}>Delivery</Text>
         </View>
-      </View>
-      <View style={styles.direct}>
-        <Text style={styles.details}>Delivery methods</Text>
-      </View>
-      <View style={styles.submain} elevation={9}>
-        <TouchableOpacity onPress={onPress1} style={styles.directs}>
-          <RadioButton selected={select} />
-          <Text style={styles.choice}>Door Delivery</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPress3} style={styles.directs}>
-          <RadioButton selected={select1} />
-          <Text style={styles.choice}>Pick up at store</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onPress2} style={styles.directs}>
-          <RadioButton selected={select2} />
-          <Text style={styles.choice}>Dine in</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={styles.direct}>
-        <Text style={styles.details}>Total</Text>
-        <Text style={styles.changes}>
-          {rupiah(Number(deliveryDetail.totalPrice))}
-        </Text>
-      </View>
-      <View style={styles.buttons2}>
-        <Pressable style={styles.inbuttons2} onPress={onPress}>
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: '600',
-              color: 'white',
-              textAlign: 'center',
-            }}>
-            Proceed to payment
+        <View style={styles.direct}>
+          <Text style={styles.details}>Address details</Text>
+          <Text style={styles.change}>change</Text>
+        </View>
+        <View style={styles.submain} elevation={9}>
+          <Text style={styles.street}>Your address</Text>
+          <View>
+            <TextInput
+              placeholder="input your address here.."
+              value={addressUser}
+              style={styles.detail}
+              onChangeText={text => {
+                handleInputValue1(text, 'address');
+                onChangeHandler(text, 'address');
+              }}
+            />
+
+            <TextInput
+              placeholder="input your phone number here.."
+              value={phoneNumber}
+              style={styles.idr}
+              onChangeText={text => {
+                handleInputValue2(text, 'mobile_number');
+                onChangeHandler(text, 'mobile_number');
+              }}
+            />
+          </View>
+        </View>
+        <View style={styles.direct}>
+          <Text style={styles.details}>Delivery methods</Text>
+        </View>
+        <View style={styles.submain} elevation={9}>
+          <TouchableOpacity onPress={onPress1} style={styles.directs}>
+            <RadioButton selected={select} />
+            <Text style={styles.choice}>Door Delivery</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPress3} style={styles.directs}>
+            <RadioButton selected={select1} />
+            <Text style={styles.choice}>Pick up at store</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={onPress2} style={styles.directs}>
+            <RadioButton selected={select2} />
+            <Text style={styles.choice}>Dine in</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.direct}>
+          <Text style={styles.details}>Total</Text>
+          <Text style={styles.changes}>
+            {rupiah(Number(deliveryDetail.totalPrice))}
           </Text>
-        </Pressable>
-      </View>
+        </View>
+        <View style={styles.buttons2}>
+          <Pressable style={styles.inbuttons2} onPress={onPress}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: '600',
+                color: 'white',
+                textAlign: 'center',
+              }}>
+              Proceed to payment
+            </Text>
+          </Pressable>
+        </View>
+      </ScrollView>
     </View>
   );
 };
@@ -203,6 +196,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 30,
   },
+  // scroll_view:{
+  //   padding: 20
+  // },
   choice: {
     paddingLeft: 20,
     marginLeft: 10,
@@ -243,23 +239,31 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
     borderRadius: 12,
+    // width: '80%',
+    // justifyContent: 'center',
+    // alignItems: 'center'
   },
   red: {
     // backgroundColor: 'red',
-    flex: 3,
+    flex: 1,
     height: 50,
     padding: 20,
   },
   main: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
   },
   sect: {
-    // backgroundColor: 'yellow',
-    flex: 1,
-    height: 50,
-    paddingTop: 20,
+    flex: 3,
+
+    marginLeft: 35,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  sect2: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: 'black',
   },
   delivery: {
     fontWeight: 'bold',

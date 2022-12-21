@@ -20,16 +20,27 @@ import finger from '../../assets/image/finger.png';
 import {color} from 'react-native-reanimated';
 import Checkout from '../../Components/checkout';
 import {useDispatch, useSelector} from 'react-redux';
+import transactionAction from '../../redux/actions/transaction';
 
 const Cart = ({navigation}) => {
+  // const deliveryDetail = useSelector(state => state.checkout.checkoutItemList);
+  // const [body, setBody] = useState({
+  //   total: deliveryDetail.totalPrice,
+  //   image: deliveryDetail.image,
+  //   phone_number: deliveryDetail.phoneNumber,
+  // });
+
+
   const onPress = () => {
     navigation.navigate('Delivery');
-    console.log('te');
+    // dispatch(transactionAction.addTransactionThunk)
   };
 
- 
+
 
   const productCart = useSelector(state => state.productDetail.productsDetails[0]);
+  const idProduct = useSelector(state => state.cart.cart);
+  console.log(idProduct);
 
   return (
     <View style={styles.container}>
@@ -60,15 +71,10 @@ const Cart = ({navigation}) => {
         <Text style={styles.swipe}>swipe on an item to delete</Text>
       </View>
       <Checkout
-      // id={productCart.id}
       name={productCart.name}
       price={productCart.price}
       image={productCart.image}
-
-      // id={22}
-      // name={'productCart.name'}
-      // price={12345}
-      // image={cup}
+      
       />
       <View style={styles.buttons2}>
         <Pressable style={styles.inbuttons2} onPress={onPress}>

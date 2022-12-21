@@ -10,6 +10,7 @@ import {
   DrawerLayoutAndroid,
   Pressable,
   Touchable,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -46,15 +47,10 @@ const HompepageAdmin = ({navigation}) => {
 
   const getProfileInfo = useSelector(state => state.profile.profile.result);
 
-
   const [search, setSearch] = useState(null);
   const [counter, setCounter] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
-  const [dataSources, setDataSources] = useState(
-
-    product,
-
-  );
+  const [dataSources, setDataSources] = useState(product);
   const [param, setParam] = useState({});
 
   const dispatch = useDispatch();
@@ -154,7 +150,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'newest',
     };
     setParam(body);
- 
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -170,11 +166,7 @@ const HompepageAdmin = ({navigation}) => {
   };
 
   const add = () => {
-
-    setDataSources(
-   
-      product,
-    );
+    setDataSources(product);
   };
 
   const logOutMsg = () => {
@@ -202,11 +194,7 @@ const HompepageAdmin = ({navigation}) => {
   const removeValue = async () => {
     try {
       await AsyncStorage.removeItem('token');
-    } catch (e) {
-   
-    }
-
-
+    } catch (e) {}
   };
   const [searchProduct, setSearchProduct] = useState('');
   const onChangeHandler = text => setSearchProduct(text);
@@ -218,13 +206,14 @@ const HompepageAdmin = ({navigation}) => {
   const url = 'http://192.168.137.1:8070';
   const countries = ['Most expensive', 'Cheapest', 'Newest', 'Oldest'];
 
-
   const pageSize = 12;
   let page = pageIndex;
   const totalPages = Math.ceil(product.length / pageSize);
   console.log(page);
   const pageData = product.slice(page * pageSize - pageSize, page * pageSize);
-  console.log(pageData);
+  
+  let dataResource = [...pageData, ...pageData]
+  console.log(dataResource);
 
   const nextData = () => {
     const tempCount = pageIndex + 1;
@@ -247,22 +236,13 @@ const HompepageAdmin = ({navigation}) => {
     getData();
     dispatch(productsAction.getProductsThunk(body, counter, add));
     dispatch(profileAction.getProfileThunk(id, token));
-   
   }, [counter]);
 
   const navigationView = () => (
-    <View
-      style={[
-        styles.containerDrawer,
-     
-      ]}>
+    <View style={[styles.containerDrawer]}>
       <View style={styles.wrapperdrawer}>
         <View elevation={9} style={styles.drawermain}>
-          <Image
-      
-            source={admin}
-            style={styles.drawerpic}
-          />
+          <Image source={admin} style={styles.drawerpic} />
           <Text style={styles.names}>
             {getProfileInfo[0].name === undefined
               ? 'nama'
@@ -307,6 +287,98 @@ const HompepageAdmin = ({navigation}) => {
       </View>
     </View>
   );
+
+  const renderFooter = () => (
+    <View style={styles.thebutton}>
+      <View style={styles.buttons2}>
+        <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '600',
+              color: 'white',
+              textAlign: 'center',
+            }}>
+            Add Product
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.buttons2}>
+        <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '600',
+              color: '#6A4029',
+              textAlign: 'center',
+            }}>
+            Add Promo
+          </Text>
+        </Pressable>
+      </View>
+      
+    </View>
+  );
+
+  const renderHeader = () => (
+    <View style={styles.dropdown}>
+      <SelectDropdown
+        data={countries}
+        onSelect={(selectedItem, index) => {
+          if (index === 0) {
+            mostExpensive();
+          }
+          if (index === 1) {
+            cheapest();
+          }
+          if (index === 2) {
+            newest();
+          }
+          if (index === 3) {
+            oldest();
+          }
+        }}
+        defaultButtonText={'Sort by :'}
+        buttonTextAfterSelection={(selectedItem, index) => {
+          return selectedItem;
+        }}
+        rowTextForSelection={(item, index) => {
+          return item;
+        }}
+        buttonStyle={styles.dropdown1BtnStyle}
+        buttonTextStyle={styles.dropdown1BtnTxtStyle}
+        renderDropdownIcon={isOpened => {
+          return (
+            <FontAwesome
+              name={isOpened ? 'chevron-up' : 'chevron-down'}
+              color={'#444'}
+              size={18}
+            />
+          );
+        }}
+        dropdownIconPosition={'right'}
+        dropdownStyle={styles.dropdown1DropdownStyle}
+        rowStyle={styles.dropdown1RowStyle}
+        rowTextStyle={styles.dropdown1RowTxtStyle}
+      />
+    </View>
+  );
+
+  const renderEmpty = () => (
+    <View style={styles.emptyText}>
+      <Text>No Data at the moment</Text>
+      {/* <Button onPress={() => requestAPI()} title='Refresh'/> */}
+    </View>
+  );
+
+  const fetchMoreData = () => {
+    // if (!newsModel.isListEnd && !newsModel.moreLoading) {
+    //     setPage(page + 1)
+    // }
+    const tempCount = pageIndex + 1;
+    setPageIndex(tempCount);
+    // setCounter(tempCount)
+  };
 
   return (
     <>
@@ -390,52 +462,81 @@ const HompepageAdmin = ({navigation}) => {
               <Text>Non-Coffee</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView>
-            <View style={styles.dropdown}>
-              <SelectDropdown
-                data={countries}
-              
-                onSelect={(selectedItem, index) => {
-          
-                  if (index === 0) {
-                    mostExpensive();
-                  }
-                  if (index === 1) {
-                    cheapest();
-                  }
-                  if (index === 2) {
-                    newest();
-                  }
-                  if (index === 3) {
-                    oldest();
-                  }
-                }}
-                defaultButtonText={'Sort by :'}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  return item;
-                }}
-                buttonStyle={styles.dropdown1BtnStyle}
-                buttonTextStyle={styles.dropdown1BtnTxtStyle}
-                renderDropdownIcon={isOpened => {
-                  return (
-                    <FontAwesome
-                      name={isOpened ? 'chevron-up' : 'chevron-down'}
-                      color={'#444'}
-                      size={18}
-                    />
-                  );
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={styles.dropdown1DropdownStyle}
-                rowStyle={styles.dropdown1RowStyle}
-                rowTextStyle={styles.dropdown1RowTxtStyle}
-              />
-            </View>
 
-            <View style={styles.content}>
+          {/* <View style={styles.dropdown}>
+            <SelectDropdown
+              data={countries}
+              onSelect={(selectedItem, index) => {
+                if (index === 0) {
+                  mostExpensive();
+                }
+                if (index === 1) {
+                  cheapest();
+                }
+                if (index === 2) {
+                  newest();
+                }
+                if (index === 3) {
+                  oldest();
+                }
+              }}
+              defaultButtonText={'Sort by :'}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+              buttonStyle={styles.dropdown1BtnStyle}
+              buttonTextStyle={styles.dropdown1BtnTxtStyle}
+              renderDropdownIcon={isOpened => {
+                return (
+                  <FontAwesome
+                    name={isOpened ? 'chevron-up' : 'chevron-down'}
+                    color={'#444'}
+                    size={18}
+                  />
+                );
+              }}
+              dropdownIconPosition={'right'}
+              dropdownStyle={styles.dropdown1DropdownStyle}
+              rowStyle={styles.dropdown1RowStyle}
+              rowTextStyle={styles.dropdown1RowTxtStyle}
+            />
+          </View> */}
+          <FlatList
+            // style={styles.content}
+            numColumns={2}
+            // horizontal={false}
+            contentContainerStyle={{
+              // flexGrow: 1,
+              // flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              // width: 393,
+              // backgroundColor:'grey',
+              padding: 20,
+              marginLeft: -30,
+              // flexWrap: 'wrap',
+            }}
+            data={pageData}
+            renderItem={({item}) => (
+              <ProductsAdmin
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                id={item.id}
+                key={item.id}
+              />
+            )}
+            ListHeaderComponent={renderHeader}
+            ListFooterComponent={renderFooter}
+            ListEmptyComponent={renderEmpty}
+            onEndReachedThreshold={0.2}
+            onEndReached={fetchMoreData}
+          />
+
+          {/* <View style={styles.content}>
               {searchProduct === ''
                 ? pageData &&
                   // dataSources
@@ -489,8 +590,8 @@ const HompepageAdmin = ({navigation}) => {
                         />
                       );
                     })}
-            </View>
-            <View style={styles.pagination}>
+            </View> */}
+          {/* <View style={styles.pagination}>
               {pageIndex === 1 ? (
                 <Text style={styles.nexts}>Prev</Text>
               ) : (
@@ -506,56 +607,55 @@ const HompepageAdmin = ({navigation}) => {
                   <Text style={styles.next}>Next</Text>
                 </TouchableOpacity>
               )}
-            </View>
-            <View style={styles.buttons2}>
-              <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: '600',
-                    color: 'white',
-                    textAlign: 'center',
-                  }}>
-                  Add Product
-                </Text>
-              </Pressable>
-            </View>
-            <View style={styles.buttons2}>
-              <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: '600',
-                    color: '#6A4029',
-                    textAlign: 'center',
-                  }}>
-                  Add Promo
-                </Text>
-              </Pressable>
-            </View>
-            <View style={styles.buttons2}>
-              <Pressable
-                style={styles.inbuttons4}
-                onPress={() => {
-                  showNotifHandle('pesan dari notifikasi');
+            </View> */}
+          {/* <View style={styles.buttons2}>
+            <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: 'white',
+                  textAlign: 'center',
                 }}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: '600',
-                    color: '#6A4029',
-                    textAlign: 'center',
-                  }}>
-                  Show Notification
-                </Text>
-              </Pressable>
-            </View>
-            <Tab.Navigator>
-              <Tab.Screen name="SignUp" component={SignUpData} />
+                Add Product
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttons2}>
+            <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: '#6A4029',
+                  textAlign: 'center',
+                }}>
+                Add Promo
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttons2}>
+            <Pressable
+              style={styles.inbuttons4}
+              onPress={() => {
+                showNotifHandle('pesan dari notifikasi');
+              }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: '#6A4029',
+                  textAlign: 'center',
+                }}>
+                Show Notification
+              </Text>
+            </Pressable>
+          </View> */}
+          <Tab.Navigator>
+            <Tab.Screen name="SignUp" component={SignUpData} />
 
-              <Tab.Screen name="Welcome" component={Welcome} />
-            </Tab.Navigator>
-          </ScrollView>
+            <Tab.Screen name="Welcome" component={Welcome} />
+          </Tab.Navigator>
         </View>
       </DrawerLayoutAndroid>
     </>
@@ -598,6 +698,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginTop: 20,
+    marginLeft:-180,
+    width: '110%'
+  },
+  thebutton: {
+    height: '100%',
   },
   inbuttons2: {
     backgroundColor: '#6A4029',
@@ -608,6 +713,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 10,
     marginBottom: 20,
+  },
+  emptyText: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   inbuttons3: {
     backgroundColor: '#FFBA33',

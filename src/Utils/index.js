@@ -48,6 +48,49 @@ export const addPromoApi = (body, token) => {
   });
 };
 
+export const addTransactionApi = (body, token) => {
+  console.log(token);
+  const URL = baseUrl + '/transactions/create';
+  return axios.post(URL, body, {
+    headers: {
+      'x-access-token': token,
+    },
+  });
+};
+
+export const getAllTransactionApi = () => {
+  const URL = baseUrl + '/transactions/all';
+  return axios.get(URL);
+};
+
+export const editTransactionApi = (body, id) => {
+  console.log(body);
+  const URL = baseUrl + `/transactions/modify/?id=${id}`;
+  return axios.patch(URL, body);
+};
+
+
+export const getHistoryTransactionApi = (token) => {
+  const URL = localUrl + `/transactions/history`;
+  return axios.get(URL, {
+    headers: {
+      'x-access-token': token,
+    },
+  });
+};
+
+export const deleteHistoryApi = (id, token) => {
+  console.log(id);
+  console.log(token);
+  const URL = baseUrl + `/transactions/delete_history/?id=${id}`;
+  return axios.delete(URL, {
+    headers: {
+      'x-access-token': token,
+    },
+  });
+};
+
+
 export const getProduct = param => {
   const queryParam = {
     filter: param.filter ?? '',

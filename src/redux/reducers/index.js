@@ -7,6 +7,7 @@ import paymentReducer from "./payment";
 import productsDetailsReducer from "./productDetail";
 import productsReducer from "./products";
 import profileReducer from "./profile";
+import transactionReducer from "./transaction";
 
 export default combineReducers({
   auth: authReducer,
@@ -15,5 +16,6 @@ export default combineReducers({
   cart: cartReducer,
   checkout: checkoutReducer,
   profile: profileReducer,
-  payment: paymentReducer
+  payment: paymentReducer,
+  transaction: transactionReducer
 });
