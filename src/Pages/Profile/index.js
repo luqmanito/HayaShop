@@ -24,7 +24,7 @@ const Profile = ({navigation}) => {
     navigation.navigate('EditProfile');
   };
   const getProfileInfo = useSelector(state => state.profile.profile.result);
-
+console.log(getProfileInfo);
   const onPress2 = () => {
     setSelect(false);
     setSelect1(false);
@@ -72,7 +72,7 @@ const Profile = ({navigation}) => {
           borderRadius: 12,
         }}>
         <Image
-          source={{uri: `${url + getProfileInfo[0].image}`}}
+          source={{uri: getProfileInfo[0].image}}
           style={{width: 90, height: 90, borderRadius: 50, marginRight: 20}}
         />
         <View style={styles.descwrap}>

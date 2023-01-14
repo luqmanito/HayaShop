@@ -27,7 +27,7 @@ function Checkout(props) {
   const [body, setBody] = useState(productReview);
 
   const productReview = {
-    image: url + props.image,
+    image: props.image,
     product_name: props.name,
     quantity: counter,
     totalPrice: price,
@@ -57,7 +57,7 @@ console.log(productReview);
         borderRadius: 12,
       }}>
       <Image
-        source={{uri: `${url + props.image}`}}
+        source={{uri: props.image}}
         style={{width: 100, height: 100, borderRadius: 50, marginRight: 20}}
       />
       <View>

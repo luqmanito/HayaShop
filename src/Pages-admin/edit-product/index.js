@@ -129,7 +129,7 @@ const EditDetailAdmin = ({navigation, route}) => {
   const [productName, setProductName] = useState(product.name);
   const [productPrice, setProductPrice] = useState(product.price);
   const [imageCamera, setImageCamera] = useState({
-    uri: `${url + product.image}`,
+    uri: product.image,
   });
   const [formState, setFormState] = useState({});
 

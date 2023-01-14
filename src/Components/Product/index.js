@@ -20,7 +20,7 @@ function Products(props) {
     <View>
       <TouchableOpacity onPress={onPress}>
         <View elevation={9} style={styles.part1}>
-          <Image source={{uri: `${url+props.image}`}} style={styles.img1} />
+          <Image source={{uri: props.image}} style={styles.img1} />
           <Text style={styles.nameTag}>{props.name}</Text>
           <Text style={styles.priceTag}>{props.price}</Text>
         </View>

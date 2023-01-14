@@ -12,7 +12,7 @@ export function SplashScreen() {
 
   const getUserDataProfile = useSelector(state => state.auth.userData);
   const getProfileInfo = useSelector(state => state.profile.result);
-  const id = getUserDataProfile.id;
+  // const id = getUserDataProfile[0].id;
   const role = getUserDataProfile.role;
 
   const [hideSplash, setHideSplash] = useState(false);

@@ -86,9 +86,9 @@ const ProductDetail = ({navigation, route}) => {
       <View style={styles.cupWrap}>
         <Image
           source={
-            {uri: `${url + product.image}`} === null
+            {uri: product.image} === null
               ? cup
-              : {uri: `${url + product.image}`}
+              : {uri: product.image}
           }
           style={styles.cupimg}
         />

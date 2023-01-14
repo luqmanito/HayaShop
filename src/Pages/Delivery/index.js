@@ -30,11 +30,11 @@ const Delivery = ({navigation}) => {
   const token = getUserDataProfile.token;
 
   const getProfileInfo = useSelector(state => state.profile.profile.result);
-  console.log(getProfileInfo[0].name);
+  console.log(getProfileInfo.name);
 
-  const [addressUser, setAddressUser] = useState(getProfileInfo[0].address);
+  const [addressUser, setAddressUser] = useState(getProfileInfo.address);
   const [phoneNumber, setPhoneNumber] = useState(
-    getProfileInfo[0].mobile_number,
+    getProfileInfo.mobile_number,
   );
 
   const [delivMethod, setDelivMethod] = useState(null);

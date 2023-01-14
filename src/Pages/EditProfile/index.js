@@ -32,7 +32,7 @@ const EditProfile = ({navigation}) => {
 
   const token = getUserDataProfile.token;
   const id = getUserDataProfile.id;
-  console.log(getProfileInfo[0].gender);
+  console.log(getProfileInfo.gender);
   const [select1, setSelect1] = useState(
     getProfileInfo[0].gender === 'female' ? 'selected' : null,
   );
@@ -40,21 +40,23 @@ const EditProfile = ({navigation}) => {
     getProfileInfo[0].gender === 'male' ? 'selected' : null,
   );
   const [date, setDate] = useState(new Date(getProfileInfo[0].birth_date));
+  // const [date, setDate] = useState(tanggal);
+  console.log(tanggal);
 
-  const tanggal = new Date(getProfileInfo[0].birth_date);
-  const dds = (value) => {
-    new Intl.DateTimeFormat('en-GB', {
-      year: 'numeric',
-      month: 'short',
-      day: '2-digit',
-    })
-      .format(value)
-      .split(' ')
-      .join('-');
+  const tanggal = new Date(getProfileInfo.birth_date);
+//   const dds = (value) => {
+//     new Intl.DateTimeFormat('en-GB', {
+//       year: 'numeric',
+//       month: 'short',
+//       day: '2-digit',
+//     })
+//       .format(value)
+//       .split(' ')
+//       .join('-');
 
-      return dds
-  };
-console.log(dds);
+//       return dds
+//   };
+// console.log(dds);
   const [finalDate, setFinalDate] = useState({
     birth_date: new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
@@ -123,7 +125,7 @@ console.log(dds);
   };
 
   const [imageCamera, setImageCamera] = useState({
-    uri: `${url + getProfileInfo[0].image}`,
+    uri: getProfileInfo[0].image,
   });
 
   const openCamera = () => {
@@ -175,7 +177,7 @@ console.log(dds);
     });
   };
 
-  const fileName = imageCamera.uri.split('/').pop();
+  // const fileName = imageCamera.uri.split('/').pop();
   // const fileType = fileName.split('.').pop();
 
   const [modalVisible, setModalVisible] = useState(false);
@@ -309,7 +311,7 @@ console.log(dds);
         <View style={styles.wrappers}>
           <TextInput
             // placeholderTextColor="black"
-            value={getProfileInfo[0].email}
+            value={getProfileInfo.email}
             style={styles.form}
           />
         </View>

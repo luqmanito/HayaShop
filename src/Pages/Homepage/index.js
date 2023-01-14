@@ -235,9 +235,9 @@ const Hompepage = ({navigation}) => {
         <View elevation={9} style={styles.drawermain}>
           <Image
             source={
-              {uri: `${url + getProfileInfo[0].image}`} === null
+              {uri: getProfileInfo[0].image} === null
                 ? cup
-                : {uri: `${url + getProfileInfo[0].image}`}
+                : {uri: getProfileInfo[0].image}
             }
             style={styles.drawerpic}
           />
