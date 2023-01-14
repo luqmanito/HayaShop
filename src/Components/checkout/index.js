@@ -4,17 +4,13 @@ import drink1 from '../../assets/image/drink1.png';
 import {useNavigation} from '@react-navigation/native';
 import checkoutAction from '../../redux/actions/checkout';
 import {useDispatch, useSelector} from 'react-redux';
+import transactionAction from '../../redux/actions/transaction';
 
 function Checkout(props) {
   const navigation = useNavigation();
   const url = 'http://192.168.137.1:8070';
   const idku = props.id;
-  // console.log(idku);
   const dispatch = useDispatch();
-
-  // const productCart = useSelector(state => state.cart.cart.body);
-  // console.log(productCart);
-
   
   const rupiah = (number) => {
     return new Intl.NumberFormat("id-ID", {
@@ -22,6 +18,8 @@ function Checkout(props) {
       currency: "IDR",
     }).format(number);
   };
+
+ console.log(idku);
 
   const [counter, setCounter] = useState(1);
   const [price, setPrice] = useState(props.price);
@@ -33,6 +31,7 @@ function Checkout(props) {
     product_name: props.name,
     quantity: counter,
     totalPrice: price,
+    id: idku
   };
   
   useEffect(() => {
@@ -80,7 +79,7 @@ console.log(productReview);
                 const reduce = counter - 1;
                 setCounter(reduce);
                 setPrice(base * reduce);
-                console.log(price);
+                // console.log(price);
               }
             }}>
             <Text style={styles.qtyo}>-</Text>
@@ -91,7 +90,7 @@ console.log(productReview);
               const reduce = counter + 1;
               setCounter(reduce);
               setPrice(base * reduce);
-              console.log(productReview.totalPrice);
+              // console.log(productReview.totalPrice);
             }}>
             <Text style={styles.qtyo}>+</Text>
           </TouchableOpacity>

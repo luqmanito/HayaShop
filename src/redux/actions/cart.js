@@ -7,7 +7,6 @@ const payment = (body) => ({
     payload: { body },
 });
 
-
 const paymentAction = {
     payment,
 };

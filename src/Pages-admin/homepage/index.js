@@ -10,6 +10,7 @@ import {
   DrawerLayoutAndroid,
   Pressable,
   Touchable,
+  FlatList,
   TouchableOpacity,
 } from 'react-native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
@@ -37,6 +38,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import SelectDropdown from 'react-native-select-dropdown';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import ProductsAdmin from '../../Components/Products-admin';
+import PushNotification from 'react-native-push-notification';
 const HompepageAdmin = ({navigation}) => {
   const product = useSelector(state => state.products.products);
   const getUserDataProfile = useSelector(state => state.auth.userData);
@@ -44,24 +46,13 @@ const HompepageAdmin = ({navigation}) => {
   const token = getUserDataProfile.token;
 
   const getProfileInfo = useSelector(state => state.profile.profile.result);
-  // console.log(getProfileInfo[0].name);
 
   const [search, setSearch] = useState(null);
   const [counter, setCounter] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
-  const [dataSources, setDataSources] = useState(
-    // [
-    // ...product
-    product,
-    // ]
-  );
-  const [param, setParam] = useState({
-    // search: getQuery.get("search") ?? "",
-    // sort: getQuery.get("sort") ?? "",
-    // filter: getQuery.get("filter") ?? "",
-    // page: getQuery.get("page") ?? 1,
-  });
-  // console.log(product);
+  const [dataSources, setDataSources] = useState(product);
+  const [param, setParam] = useState({});
+
   const dispatch = useDispatch();
   const Tab = createBottomTabNavigator();
   const drawer = useRef(null);
@@ -86,8 +77,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'asc',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -98,8 +88,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: '',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -110,8 +99,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: '',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -122,8 +110,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'most-popular',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -134,8 +121,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'most-expensive',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -146,11 +132,17 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'cheapest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
+  const showNotifHandle = msg => {
+    PushNotification.localNotification({
+      channelId: 'local-notification',
+      title: 'Local Notification',
+      message: msg,
+    });
+  };
   const newest = () => {
     const body = {
       ...param,
@@ -158,8 +150,7 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'newest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -170,17 +161,12 @@ const HompepageAdmin = ({navigation}) => {
       sort: 'oldest',
     };
     setParam(body);
-    // const tempCount = counter + 1;
-    // setCounter(tempCount);
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
   const add = () => {
-    // setDataSources([...dataSources, ...product]);
-    setDataSources(
-      // ...dataSources, ...product
-      product,
-    );
+    setDataSources(product);
   };
 
   const logOutMsg = () => {
@@ -201,18 +187,14 @@ const HompepageAdmin = ({navigation}) => {
       const value = await AsyncStorage.getItem('token');
       console.log(value);
     } catch (e) {
-       console.log(e.err);
+      console.log(e.err);
     }
   };
 
   const removeValue = async () => {
     try {
       await AsyncStorage.removeItem('token');
-    } catch (e) {
-      // remove error
-    }
-
-    // console.log('Done.');
+    } catch (e) {}
   };
   const [searchProduct, setSearchProduct] = useState('');
   const onChangeHandler = text => setSearchProduct(text);
@@ -223,14 +205,15 @@ const HompepageAdmin = ({navigation}) => {
 
   const url = 'http://192.168.137.1:8070';
   const countries = ['Most expensive', 'Cheapest', 'Newest', 'Oldest'];
-  // console.log(param);
 
   const pageSize = 12;
   let page = pageIndex;
   const totalPages = Math.ceil(product.length / pageSize);
   console.log(page);
   const pageData = product.slice(page * pageSize - pageSize, page * pageSize);
-  console.log(pageData);
+  
+  let dataResource = [...pageData, ...pageData]
+  console.log(dataResource);
 
   const nextData = () => {
     const tempCount = pageIndex + 1;
@@ -244,7 +227,6 @@ const HompepageAdmin = ({navigation}) => {
     navigation.navigate('AddPromo', {});
   };
 
-
   const prevData = () => {
     const tempCount = pageIndex - 1;
     setPageIndex(tempCount);
@@ -254,27 +236,13 @@ const HompepageAdmin = ({navigation}) => {
     getData();
     dispatch(productsAction.getProductsThunk(body, counter, add));
     dispatch(profileAction.getProfileThunk(id, token));
-    // setDataSources(product);
-    // addData()
   }, [counter]);
 
   const navigationView = () => (
-    <View
-      style={[
-        styles.containerDrawer,
-        // styles.navigationContainer
-      ]}>
+    <View style={[styles.containerDrawer]}>
       <View style={styles.wrapperdrawer}>
         <View elevation={9} style={styles.drawermain}>
-          <Image
-            // source={
-            //   {uri: `${url + getProfileInfo[0].image}`} === undefined
-            //     ? cup
-            //     : {uri: `${url + getProfileInfo[0].image}`}
-            // }
-            source={admin}
-            style={styles.drawerpic}
-          />
+          <Image source={admin} style={styles.drawerpic} />
           <Text style={styles.names}>
             {getProfileInfo[0].name === undefined
               ? 'nama'
@@ -320,6 +288,98 @@ const HompepageAdmin = ({navigation}) => {
     </View>
   );
 
+  const renderFooter = () => (
+    <View style={styles.thebutton}>
+      <View style={styles.buttons2}>
+        <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '600',
+              color: 'white',
+              textAlign: 'center',
+            }}>
+            Add Product
+          </Text>
+        </Pressable>
+      </View>
+      <View style={styles.buttons2}>
+        <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: '600',
+              color: '#6A4029',
+              textAlign: 'center',
+            }}>
+            Add Promo
+          </Text>
+        </Pressable>
+      </View>
+      
+    </View>
+  );
+
+  const renderHeader = () => (
+    <View style={styles.dropdown}>
+      <SelectDropdown
+        data={countries}
+        onSelect={(selectedItem, index) => {
+          if (index === 0) {
+            mostExpensive();
+          }
+          if (index === 1) {
+            cheapest();
+          }
+          if (index === 2) {
+            newest();
+          }
+          if (index === 3) {
+            oldest();
+          }
+        }}
+        defaultButtonText={'Sort by :'}
+        buttonTextAfterSelection={(selectedItem, index) => {
+          return selectedItem;
+        }}
+        rowTextForSelection={(item, index) => {
+          return item;
+        }}
+        buttonStyle={styles.dropdown1BtnStyle}
+        buttonTextStyle={styles.dropdown1BtnTxtStyle}
+        renderDropdownIcon={isOpened => {
+          return (
+            <FontAwesome
+              name={isOpened ? 'chevron-up' : 'chevron-down'}
+              color={'#444'}
+              size={18}
+            />
+          );
+        }}
+        dropdownIconPosition={'right'}
+        dropdownStyle={styles.dropdown1DropdownStyle}
+        rowStyle={styles.dropdown1RowStyle}
+        rowTextStyle={styles.dropdown1RowTxtStyle}
+      />
+    </View>
+  );
+
+  const renderEmpty = () => (
+    <View style={styles.emptyText}>
+      <Text>No Data at the moment</Text>
+      {/* <Button onPress={() => requestAPI()} title='Refresh'/> */}
+    </View>
+  );
+
+  const fetchMoreData = () => {
+    // if (!newsModel.isListEnd && !newsModel.moreLoading) {
+    //     setPage(page + 1)
+    // }
+    const tempCount = pageIndex + 1;
+    setPageIndex(tempCount);
+    // setCounter(tempCount)
+  };
+
   return (
     <>
       <Modal
@@ -327,7 +387,6 @@ const HompepageAdmin = ({navigation}) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          // Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);
         }}>
         <View style={styles.centeredView}>
@@ -367,7 +426,7 @@ const HompepageAdmin = ({navigation}) => {
                 />
               </TouchableOpacity>
             </View>
-        
+
             <View style={styles.sect}>
               <Image
                 source={cart}
@@ -378,7 +437,6 @@ const HompepageAdmin = ({navigation}) => {
                 }}
               />
             </View>
-        
           </View>
           <View style={styles.goodWrapper}>
             <Text style={styles.good}>A good coffee is {'\n'}a good day</Text>
@@ -404,53 +462,81 @@ const HompepageAdmin = ({navigation}) => {
               <Text>Non-Coffee</Text>
             </TouchableOpacity>
           </View>
-          <ScrollView>
-            <View style={styles.dropdown}>
-              <SelectDropdown
-                data={countries}
-                // defaultValueByIndex={1}
-                // defaultValue={'Egypt'}
-                onSelect={(selectedItem, index) => {
-                  // console.log(selectedItem, index);
-                  if (index === 0) {
-                    mostExpensive();
-                  }
-                  if (index === 1) {
-                    cheapest();
-                  }
-                  if (index === 2) {
-                    newest();
-                  }
-                  if (index === 3) {
-                    oldest();
-                  }
-                }}
-                defaultButtonText={'Sort by :'}
-                buttonTextAfterSelection={(selectedItem, index) => {
-                  return selectedItem;
-                }}
-                rowTextForSelection={(item, index) => {
-                  return item;
-                }}
-                buttonStyle={styles.dropdown1BtnStyle}
-                buttonTextStyle={styles.dropdown1BtnTxtStyle}
-                renderDropdownIcon={isOpened => {
-                  return (
-                    <FontAwesome
-                      name={isOpened ? 'chevron-up' : 'chevron-down'}
-                      color={'#444'}
-                      size={18}
-                    />
-                  );
-                }}
-                dropdownIconPosition={'right'}
-                dropdownStyle={styles.dropdown1DropdownStyle}
-                rowStyle={styles.dropdown1RowStyle}
-                rowTextStyle={styles.dropdown1RowTxtStyle}
-              />
-            </View>
 
-            <View style={styles.content}>
+          {/* <View style={styles.dropdown}>
+            <SelectDropdown
+              data={countries}
+              onSelect={(selectedItem, index) => {
+                if (index === 0) {
+                  mostExpensive();
+                }
+                if (index === 1) {
+                  cheapest();
+                }
+                if (index === 2) {
+                  newest();
+                }
+                if (index === 3) {
+                  oldest();
+                }
+              }}
+              defaultButtonText={'Sort by :'}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem;
+              }}
+              rowTextForSelection={(item, index) => {
+                return item;
+              }}
+              buttonStyle={styles.dropdown1BtnStyle}
+              buttonTextStyle={styles.dropdown1BtnTxtStyle}
+              renderDropdownIcon={isOpened => {
+                return (
+                  <FontAwesome
+                    name={isOpened ? 'chevron-up' : 'chevron-down'}
+                    color={'#444'}
+                    size={18}
+                  />
+                );
+              }}
+              dropdownIconPosition={'right'}
+              dropdownStyle={styles.dropdown1DropdownStyle}
+              rowStyle={styles.dropdown1RowStyle}
+              rowTextStyle={styles.dropdown1RowTxtStyle}
+            />
+          </View> */}
+          <FlatList
+            // style={styles.content}
+            numColumns={2}
+            // horizontal={false}
+            contentContainerStyle={{
+              // flexGrow: 1,
+              // flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              // width: 393,
+              // backgroundColor:'grey',
+              padding: 20,
+              marginLeft: -30,
+              // flexWrap: 'wrap',
+            }}
+            data={pageData}
+            renderItem={({item}) => (
+              <ProductsAdmin
+                name={item.name}
+                price={item.price}
+                image={item.image}
+                id={item.id}
+                key={item.id}
+              />
+            )}
+            ListHeaderComponent={renderHeader}
+            ListFooterComponent={renderFooter}
+            ListEmptyComponent={renderEmpty}
+            onEndReachedThreshold={0.2}
+            onEndReached={fetchMoreData}
+          />
+
+          {/* <View style={styles.content}>
               {searchProduct === ''
                 ? pageData &&
                   // dataSources
@@ -504,8 +590,8 @@ const HompepageAdmin = ({navigation}) => {
                         />
                       );
                     })}
-            </View>
-            <View style={styles.pagination}>
+            </View> */}
+          {/* <View style={styles.pagination}>
               {pageIndex === 1 ? (
                 <Text style={styles.nexts}>Prev</Text>
               ) : (
@@ -521,39 +607,55 @@ const HompepageAdmin = ({navigation}) => {
                   <Text style={styles.next}>Next</Text>
                 </TouchableOpacity>
               )}
-            </View>
-            <View style={styles.buttons2}>
-              <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: '600',
-                    color: 'white',
-                    textAlign: 'center',
-                  }}>
-                  Add Product
-                </Text>
-              </Pressable>
-            </View>
-            <View style={styles.buttons2}>
-              <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
-                <Text
-                  style={{
-                    fontSize: 24,
-                    fontWeight: '600',
-                    color: '#6A4029',
-                    textAlign: 'center',
-                  }}>
-                  Add Promo
-                </Text>
-              </Pressable>
-            </View>
-            <Tab.Navigator>
-              <Tab.Screen name="SignUp" component={SignUpData} />
+            </View> */}
+          {/* <View style={styles.buttons2}>
+            <Pressable style={styles.inbuttons2} onPress={addProductBtn}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: 'white',
+                  textAlign: 'center',
+                }}>
+                Add Product
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttons2}>
+            <Pressable style={styles.inbuttons3} onPress={addPromoBtn}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: '#6A4029',
+                  textAlign: 'center',
+                }}>
+                Add Promo
+              </Text>
+            </Pressable>
+          </View>
+          <View style={styles.buttons2}>
+            <Pressable
+              style={styles.inbuttons4}
+              onPress={() => {
+                showNotifHandle('pesan dari notifikasi');
+              }}>
+              <Text
+                style={{
+                  fontSize: 24,
+                  fontWeight: '600',
+                  color: '#6A4029',
+                  textAlign: 'center',
+                }}>
+                Show Notification
+              </Text>
+            </Pressable>
+          </View> */}
+          <Tab.Navigator>
+            <Tab.Screen name="SignUp" component={SignUpData} />
 
-              <Tab.Screen name="Welcome" component={Welcome} />
-            </Tab.Navigator>
-          </ScrollView>
+            <Tab.Screen name="Welcome" component={Welcome} />
+          </Tab.Navigator>
         </View>
       </DrawerLayoutAndroid>
     </>
@@ -596,6 +698,11 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginTop: 20,
+    marginLeft:-180,
+    width: '110%'
+  },
+  thebutton: {
+    height: '100%',
   },
   inbuttons2: {
     backgroundColor: '#6A4029',
@@ -607,7 +714,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 20,
   },
+  emptyText: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   inbuttons3: {
+    backgroundColor: '#FFBA33',
+    width: 350,
+    height: 50,
+    paddingTop: 6,
+    paddingBottom: 6,
+    borderRadius: 14,
+    marginTop: 10,
+    marginBottom: 20,
+  },
+  inbuttons4: {
     backgroundColor: '#FFBA33',
     width: 350,
     height: 50,

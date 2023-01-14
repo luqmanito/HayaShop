@@ -12,6 +12,9 @@ export const actionStrings = {
   checkoutItem: 'CHECKOUT_ITEM',
   addPayment: 'ADD_PAYMENT',
   addProduct: "ADD_PRODUCT",
-  addPromo: "ADD_PROMO"
+  addPromo: "ADD_PROMO",
+  getHistoryTransaction: "HISTORY_TRANSACTION",
+  addTransaction: "ADD_TRANSACTION",
+  deleteHistory: "DEL_HISTORY"
 };
 

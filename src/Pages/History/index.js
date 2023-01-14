@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -24,14 +24,25 @@ import finger from '../../assets/image/finger.png';
 import {color} from 'react-native-reanimated';
 import ProductsPayment from '../../Components/history';
 import {useDispatch, useSelector} from 'react-redux';
-
+import transactionAction from '../../redux/actions/transaction';
 const History = ({navigation}) => {
   const onPress = () => {
     navigation.navigate('Delivery');
-    console.log('te');
   };
-
+  const getUserDataProfile = useSelector(state => state.auth.userData);
+  const token = getUserDataProfile.token;
+  const dispatch = useDispatch();
   const deliveryDetail = useSelector(state => state.checkout.checkoutItemList);
+
+  const orderHistory = useSelector(
+    state => state.transaction.history_transaction,
+  );
+
+  console.log(orderHistory);
+
+  useEffect(() => {
+    dispatch(transactionAction.getHistoryTransactionThunk(token));
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -58,115 +69,28 @@ const History = ({navigation}) => {
           }}
         />
         <Text style={styles.swipe}>swipe on an item to delete</Text>
+        
       </View>
-      {/* <View
-        elevation={9}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 50,
-          backgroundColor: 'white',
-          padding: 10,
-          borderRadius: 12,
-        }}>
-        <Image
-          source={cup}
-          style={{width: 70, height: 70, borderRadius: 50, marginRight: 20}}
-        />
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: 'black',
-            }}>
-            Cold Brew
-          </Text>
-          <Text style={styles.idr}>IDR 30.000</Text>
-          <Text style={styles.status}>Waiting for delivery [will arrive at 3 PM]</Text>
-        </View>
-        
-      </View> */}
-      <ProductsPayment
-       grandTotal={deliveryDetail.totalPrice}
-       name={deliveryDetail.product_name}
-       qty={deliveryDetail.quantity}
-       image={deliveryDetail.image}
-      />
-      {/* <View
-        elevation={9}
-        style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginTop: 50,
-          backgroundColor: 'white',
-          padding: 10,
-          borderRadius: 12,
-        }}>
-        <Image
-          source={cup}
-          style={{width: 70, height: 70, borderRadius: 50, marginRight: 20}}
-        />
-        <View>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'bold',
-              color: 'black',
-            }}>
-            Cold Brew
-          </Text>
-          <Text style={styles.idr}>IDR 30.000</Text>
-        </View>
-        
-      </View> */}
-      {/* <View style={styles.wrapper1}>
-        <View
-          elevation={9}
-          style={{
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 50,
-            backgroundColor: 'white',
-            padding: 10,
-            borderRadius: 12,
-          }}>
-          <Image
-            source={cup}
-            style={{width: 70, height: 70, borderRadius: 50, marginRight: 20}}
-          />
-          <View>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'bold',
-                color: 'black',
-              }}>
-              Cold Brew
-            </Text>
-            <Text style={styles.idr}>IDR 30.000</Text>
-          </View>
-          
-        </View>
-      </View> */}
-      {/* <View style={styles.icon}>
-        <Image
-          source={del}
-          style={{
-            width: 40,
-            height: 40,
-            marginLeft: 20,
-          }}
-        />
-      </View> */}
+      <ScrollView>
+      {orderHistory &&
+        orderHistory.map(item => {
+          return (
+            <ProductsPayment
+              grandTotal={item.total_order}
+              name={item.products_name}
+              image={item.image}
+              status={item.status_order}
+              key={item.id}
+              id={item.id}
+            />
+          );
+        })}
       <Text style={styles.left}>You have no history left</Text>
+      </ScrollView>
     </View>
   );
 };
 
-function onPress() {
-  console.log('teken');
-}
 
 const styles = StyleSheet.create({
   buttons2: {
@@ -187,10 +111,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     marginTop: 40,
   },
-  left:{
+  left: {
     textAlign: 'center',
     marginTop: 40,
-    bottom: 0
+    bottom: 0,
   },
   icon: {
     position: 'absolute',

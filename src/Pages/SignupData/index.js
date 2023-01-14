@@ -4,12 +4,15 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   Pressable,
   TextInput,
 } from 'react-native';
 import sign from '../../assets/image/signupdata.jpg';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import { signup } from '../../Utils';
+import eye from '../../assets/image/eye.png';
+import eyedash from '../../assets/image/eyeSlash.png';
 
 const SignUpData = ({navigation}) => {
   const onPress = () => {
@@ -50,7 +53,10 @@ const SignUpData = ({navigation}) => {
       console.log(error);
     }
   };
-  
+  const setvisible = e => {
+    setPasswordVisibility(!passwordVisibility)
+  };
+  const [passwordVisibility, setPasswordVisibility] = useState(false); 
 
   return (
     <View style={styles.container}>
@@ -70,9 +76,16 @@ const SignUpData = ({navigation}) => {
               onChangeText={text => onChangeHandler(text, 'password')}
               placeholderTextColor="white"
               placeholder="Enter your password"
+              secureTextEntry={passwordVisibility === false ? true : false}
               style={styles.form}
               name="password"
             />
+            <Pressable onPress={setvisible}>
+            <Image 
+            source={passwordVisibility ? eye : eyedash}
+            style={styles.hidden}
+            />
+            </Pressable>
             <TextInput
               onChangeText={text => onChangeHandler(text, 'mobile_number')}
               placeholderTextColor="white"
@@ -129,7 +142,13 @@ const styles = StyleSheet.create({
   black: {
     flex: 1,
     backgroundColor: 'black',
-    // opacity: ,
+  },
+  hidden:{
+    position: 'absolute',
+    width:20,
+    height:20,
+    right:0,
+    bottom:20
   },
   container: {
     flex: 1,

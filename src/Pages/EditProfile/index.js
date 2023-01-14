@@ -32,23 +32,31 @@ const EditProfile = ({navigation}) => {
 
   const token = getUserDataProfile.token;
   const id = getUserDataProfile.id;
-
-  const [select1, setSelect1] = useState(null);
-  const [select2, setSelect2] = useState(null);
+  console.log(getProfileInfo[0].gender);
+  const [select1, setSelect1] = useState(
+    getProfileInfo[0].gender === 'female' ? 'selected' : null,
+  );
+  const [select2, setSelect2] = useState(
+    getProfileInfo[0].gender === 'male' ? 'selected' : null,
+  );
   const [date, setDate] = useState(new Date(getProfileInfo[0].birth_date));
 
   const tanggal = new Date(getProfileInfo[0].birth_date);
-  const dds = new Intl.DateTimeFormat('en-GB', {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-  })
-    .format(date)
-    .split(' ')
-    .join('-');
-
-  const [finalDate, setFinalDate] = useState(
+  const dds = (value) => {
     new Intl.DateTimeFormat('en-GB', {
+      year: 'numeric',
+      month: 'short',
+      day: '2-digit',
+    })
+      .format(value)
+      .split(' ')
+      .join('-');
+
+      return dds
+  };
+console.log(dds);
+  const [finalDate, setFinalDate] = useState({
+    birth_date: new Intl.DateTimeFormat('en-GB', {
       year: 'numeric',
       month: 'short',
       day: '2-digit',
@@ -56,17 +64,19 @@ const EditProfile = ({navigation}) => {
       .format(date)
       .split(' ')
       .join('-'),
-  );
+});
 
   const [open, setOpen] = useState(false);
   const onPress1 = () => {
     setSelect1(true);
     setSelect2(false);
+    setBody({...body, gender: 'female'});
   };
   const url = 'http://192.168.137.1:8070';
   const onPress3 = () => {
     setSelect1(false);
     setSelect2(true);
+    setBody({...body, gender: 'male'});
   };
   const handleChange = date => {
     setDate(date);
@@ -93,7 +103,6 @@ const EditProfile = ({navigation}) => {
   };
   const onChangeHandler = (text, type) => {
     setBody(body => ({...body, [type]: text}));
-    // setFormState(({...formState, [type]: text}));
   };
 
   const onChangeHandlerForm = (text, type) => {
@@ -175,11 +184,17 @@ const EditProfile = ({navigation}) => {
   if (body.name !== undefined) {
     data.append('name', body.name);
   }
+  if (body.gender !== undefined) {
+    data.append('gender', body.gender);
+  }
   if (body.mobile_number !== undefined) {
     data.append('mobile_number', body.mobile_number);
   }
   if (body.address !== undefined) {
     data.append('address', body.address);
+  }
+  if (body.birth_date !== undefined) {
+    data.append('birth_date', body.birth_date);
   }
   if (body.image !== undefined) {
     data.append(
@@ -233,8 +248,7 @@ const EditProfile = ({navigation}) => {
               />
             )}
 
-            <Pressable
-              onPress={() => setModalVisible(true)}>
+            <Pressable onPress={() => setModalVisible(true)}>
               <Image source={pencil} style={styles.number} />
             </Pressable>
           </View>
@@ -267,12 +281,6 @@ const EditProfile = ({navigation}) => {
               </View>
             </View>
           </Modal>
-
-          {/* <Pressable
-            style={[styles.button, styles.buttonOpen]}
-            onPress={() => setModalVisible(true)}>
-            <Text style={styles.textStyle}>Show Modal</Text>
-          </Pressable> */}
         </View>
         <Text>Name :</Text>
         <View style={styles.wrappers}>
@@ -322,7 +330,7 @@ const EditProfile = ({navigation}) => {
         <View style={styles.wrappers}>
           <TextInput
             // placeholderTextColor="black"
-            value={finalDate}
+            value={finalDate.birth_date}
             placeholder="input your birth date.."
             style={styles.form}
             onChangeText={text => {
@@ -341,7 +349,27 @@ const EditProfile = ({navigation}) => {
             onConfirm={date => {
               setOpen(false);
               setDate(date);
-              setFinalDate(dds);
+              setFinalDate({  
+                birth_date: new Intl.DateTimeFormat('en-GB', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                })
+                  .format(date)
+                  .split(' ')
+                  .join('-'),
+              });
+              setBody({
+                ...body,
+                birth_date: new Intl.DateTimeFormat('en-GB', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: '2-digit',
+                })
+                  .format(date)
+                  .split(' ')
+                  .join('-'),
+              });
             }}
             onCancel={() => {
               setOpen(false);

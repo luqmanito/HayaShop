@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -24,17 +24,36 @@ import finger from '../../assets/image/finger.png';
 import {color} from 'react-native-reanimated';
 import ProductsPayment from '../../Components/history';
 import {useDispatch, useSelector} from 'react-redux';
+import transactionAction from '../../redux/actions/transaction';
+import RadioButton from '../../Components/Radiobtn';
+import ProductsPaymentAdmin from '../../Components/history-admin';
 
 const ManageOrder = ({navigation}) => {
   const onPress = () => {
     navigation.navigate('Delivery');
   };
+  const dispatch = useDispatch();
+  const [body, setBody] = useState({
+    status_order : "Success"
+  })
+
+  const [isCheck, setIsCheck] = useState(false);
 
   const markDone = () =>{
-    console.log('semua acc');
+    setIsCheck(true)
   }
 
   const deliveryDetail = useSelector(state => state.checkout.checkoutItemList);
+  const orderHistory = useSelector(
+    state => state.transaction.history_transaction,
+  );
+
+
+  useEffect(() => {
+    dispatch(transactionAction.getAllHistoryTransactionThunk(body));
+  }, []);
+
+  console.log(orderHistory);
 
   return (
     <View style={styles.container}>
@@ -62,15 +81,22 @@ const ManageOrder = ({navigation}) => {
         />
         <Text style={styles.swipe}>swipe on an item when it's done</Text>
       </View>
-      
-      <ProductsPayment
-        grandTotal={deliveryDetail.totalPrice}
-        name={deliveryDetail.product_name}
-        qty={deliveryDetail.quantity}
-        image={deliveryDetail.image}
-      />
-    
-      {/* <Text style={styles.left}>You have no history left</Text> */}
+
+{orderHistory &&
+        orderHistory.map(item => {
+          return (
+            <ProductsPaymentAdmin
+              grandTotal={item.total_order}
+              name={item.products_name}
+              image={item.image}
+              status={item.status_order}
+              key={item.id}
+              id={item.id}
+              selected={isCheck}
+            />
+          );
+        })}
+
       <View style={styles.buttons2}>
             <Pressable style={styles.inbuttons2} onPress={markDone}>
               <Text
