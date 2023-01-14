@@ -47,14 +47,8 @@ const Hompepage = ({navigation}) => {
   const [search, setSearch] = useState(null);
   const [counter, setCounter] = useState(1);
   const [pageIndex, setPageIndex] = useState(1);
-  const [dataSources, setDataSources] = useState(
-
-    product,
-
-  );
-  const [param, setParam] = useState({
-
-  });
+  const [dataSources, setDataSources] = useState(product);
+  const [param, setParam] = useState({});
 
   const dispatch = useDispatch();
   const Tab = createBottomTabNavigator();
@@ -113,7 +107,7 @@ const Hompepage = ({navigation}) => {
       sort: 'most-popular',
     };
     setParam(body);
-  
+
     dispatch(productsAction.getProductsThunk(body, counter, add));
   };
 
@@ -229,8 +223,6 @@ const Hompepage = ({navigation}) => {
     getData();
     dispatch(productsAction.getProductsThunk(body, counter, add));
     dispatch(profileAction.getProfileThunk(id, token));
-    // setDataSources(product);
-    // addData()
   }, [counter]);
 
   const navigationView = () => (
@@ -250,9 +242,7 @@ const Hompepage = ({navigation}) => {
             style={styles.drawerpic}
           />
           <Text style={styles.names}>
-            {getProfileInfo[0].name === null
-              ? 'nama'
-              : getProfileInfo[0].name}
+            {getProfileInfo[0].name === null ? 'nama' : getProfileInfo[0].name}
           </Text>
           <Text style={styles.names2}>
             {getProfileInfo[0].email === null
@@ -453,9 +443,7 @@ const Hompepage = ({navigation}) => {
                       );
                     })
                 : product &&
-                  // dataSources
                   product
-                    // dataSources
                     .filter(detail => {
                       if (product === '') {
                         return detail;

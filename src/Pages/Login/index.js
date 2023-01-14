@@ -5,10 +5,13 @@ import {
   StyleSheet,
   Text,
   View,
+  Image,
   Pressable,
   TextInput,
 } from 'react-native';
 import sign from '../../assets/image/loginimg.jpg';
+import eye from '../../assets/image/eye.png';
+import eyedash from '../../assets/image/eyeSlash.png';
 import authAction from '../../redux/actions/auth';
 import {showMessage, hideMessage} from 'react-native-flash-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,7 +56,7 @@ const Login = () => {
       console.log('gagal nyetor');
     }
   };
-
+  const [passwordVisibility, setPasswordVisibility] = useState(false); 
   const [body, setBody] = useState({});
   const dispatch = useDispatch();
   const onChangeHandler = (text, type) => {
@@ -64,6 +67,12 @@ const Login = () => {
   const loginHandler = e => {
     e.preventDefault();
     dispatch(authAction.loginThunk(body, onPress, onPress2, storeData, onPressAdmin));
+  };
+
+  
+
+  const setvisible = e => {
+    setPasswordVisibility(!passwordVisibility)
   };
 
   return (
@@ -78,12 +87,20 @@ const Login = () => {
               placeholder="Enter your email adress"
               style={styles.form}
             />
+            
             <TextInput
               onChangeText={text => onChangeHandler(text, 'password')}
               placeholderTextColor="white"
+              secureTextEntry={passwordVisibility === false ? true : false}
               placeholder="Enter your password"
               style={styles.form}
             />
+            <Pressable onPress={setvisible}>
+            <Image 
+            source={passwordVisibility ? eye : eyedash}
+            style={styles.hidden}
+            />
+            </Pressable>
             <Text onPress={onPress3} style={styles.forgot}>
               Forgot Password
             </Text>
@@ -131,10 +148,18 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontWeight: 'bold',
   },
+  hidden:{
+    position: 'absolute',
+    width:20,
+    height:20,
+    right:0,
+    bottom:20
+  },
   form: {
     borderColor: 'white',
     borderBottomWidth: 2,
     fontWeight: 'bold',
+    color: 'white'
   },
   wrapper: {
     marginTop: 200,

@@ -31,7 +31,6 @@ const addTransactionThunk = (body, token, msg2, showNotifHandle) => {
       const result = await addTransactionApi(body, token);
       dispatch(addTransactionFulfilled(result.data));
       showNotifHandle()
-      // console.log(result.data);
     } catch (error) {
       console.log(error);
       msg2();

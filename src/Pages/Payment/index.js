@@ -55,28 +55,6 @@ console.log(idDetail.id);
     id_product: idDetail.id
   });
 
-  // const data = new FormData();
-  // if (body.products_name !== undefined) {
-  //   data.append('products_name', body.products_name);
-  // }
-  // if (body.address_detail !== undefined) {
-  //   data.append('address_detail', body.address_detail);
-  // }
-  // if (body.phone_number !== undefined) {
-  //   data.append('phone_number', body.phone_number);
-  // }
-  // if (body.payment_method !== undefined) {
-  //   data.append('payment_method', body.payment_method);
-  // }
-  // if (body.delivery_method !== undefined) {
-  //   data.append('delivery_method', body.delivery_method);
-  // }
-  // if (body.status_order !== undefined) {
-  //   data.append('status_order', body.status_order);
-  // }
-  // if (body.image !== undefined) {
-  //   data.append('image', body.image);
-  // }
 
   const msg = () => {
     showMessage({

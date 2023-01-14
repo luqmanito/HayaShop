@@ -54,7 +54,7 @@ export function SplashScreen() {
 
       getData()
       // navigation.dispatch(StackActions.replace('Welcome'));
-    },);
+    },1);
   }, []);
 
   return (

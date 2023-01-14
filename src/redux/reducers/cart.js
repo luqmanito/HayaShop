@@ -11,12 +11,6 @@ const cartReducer = (prevState = initialState, {payload, type}) => {
       case cartSubsctract:
       return {
         ...prevState,
-        // cart: {
-        // id: payload.body.id,
-        // name: payload.body.name,
-        // price: payload.body.price,
-        // image: payload.body.image,     
-        // },
         cart : payload.body
       };
 
