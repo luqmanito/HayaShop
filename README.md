@@ -1,5 +1,5 @@
 
-![Logo](https://res.cloudinary.com/dwxujoxc7/image/upload/c_scale,w_200/v1674226188/project2/Mas_Ito_Frozen_transparan_mduci6.png)
+![Logo](https://res.cloudinary.com/dwxujoxc7/image/upload/v1674228078/project2/mas-removebg-preview_esy43k.png)
 
 
 # Mobile App Haya Coffee
