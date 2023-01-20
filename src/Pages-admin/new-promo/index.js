@@ -87,7 +87,7 @@ const AddPromo = ({navigation}) => {
   };
 
   const [imageCamera, setImageCamera] = useState({
-    uri: `${url + getProfileInfo[0].image}`,
+    uri: getProfileInfo[0].image,
   });
 
   const openCamera = () => {

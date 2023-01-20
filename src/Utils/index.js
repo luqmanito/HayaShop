@@ -4,11 +4,12 @@ import axios from 'axios';
 const baseUrl = config.API_URL;
 
 const localUrl = 'http://192.168.137.1:8070/api/show';
+const deployUrl = 'https://backend-api-haya-coffee.vercel.app/api/show'
 
 const axiosRequest = (method, url, data, params) => {
   return axios({
     method,
-    url: `${localUrl}${url}`,
+    url: `${deployUrl}${url}`,
     data,
     params,
   });
@@ -23,7 +24,7 @@ export const loginApi = data => {
 };
 
 export const signup = body => {
-  const URL = localUrl + '/users/add';
+  const URL = deployUrl + '/users/add';
 
   return axios.post(URL, body);
 };
@@ -71,7 +72,7 @@ export const editTransactionApi = (body, id) => {
 
 
 export const getHistoryTransactionApi = (token) => {
-  const URL = localUrl + `/transactions/history`;
+  const URL = deployUrl + `/transactions/history`;
   return axios.get(URL, {
     headers: {
       'x-access-token': token,
@@ -110,19 +111,19 @@ export const getProducts = (param, counter) => {
     page: param.page ?? '1',
   };
   const URL =
-    localUrl +
+    deployUrl +
     `/products/all?search=${queryParam.search}&filter=${queryParam.filter}&page=${counter}&sort=${queryParam.sort}&limit=100`;
 
   return axios.get(URL);
 };
 
 export const getProductById = id => {
-  const URL = localUrl + `/products/product_detail/?id=${id}`;
+  const URL = deployUrl + `/products/product_detail/?id=${id}`;
   return axios.get(URL);
 };
 
 export const getProfile = (id, token) => {
-  const URL = localUrl + `/users/profile/?id=${id}`;
+  const URL = deployUrl + `/users/profile/?id=${id}`;
   return axios.get(URL, {
     headers: {
       'x-access-token': token,
