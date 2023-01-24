@@ -58,6 +58,14 @@ These instructions will help you to get a copy of the project up and running on 
 
 ![App Screenshot](https://res.cloudinary.com/dwxujoxc7/image/upload/c_scale,w_250/v1674227476/project2/homeweb4_lah0hn.jpg)
 
+## Related
+
+Here are some related projects
+
+[Backend Repositories](https://github.com/luqmanito/Project-1-Restful-API-Mockup-Haya-Coffee)
+
+[Frontend Haya Coffee](https://github.com/luqmanito/my-app)
+
 ## Feedback
 
 If you have any feedback, please reach out me at luqmangrahito@gmail.com
